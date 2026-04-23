@@ -3,153 +3,69 @@ import { ref, computed } from 'vue'
 import { getCoreCompletionPercent, getContributionPoints, getTotalPoints, formatDate } from '../data/dummyData'
 import ProgressRing from './ProgressRing.vue'
 
-const props = defineProps({
-  employee: { type: Object, required: true },
-})
+const props = defineProps({ employee: { type: Object, required: true } })
 const emit = defineEmits(['close'])
-
 const isApproved = ref(false)
-
-const coreCompletionPct = computed(() => getCoreCompletionPercent(props.employee))
-const contributionPoints = computed(() => getContributionPoints(props.employee))
-const totalScore = computed(() => getTotalPoints(props.employee))
-
-const scoreColor = computed(() => {
-  if (totalScore.value >= 200) return '#27a78e'
-  if (totalScore.value >= 100) return '#f59e0b'
-  return '#f75e3b'
-})
-
-const maxScore = 400
-const scorePercent = computed(() => Math.min(Math.round((totalScore.value / maxScore) * 100), 100))
-
-function approve() {
-  isApproved.value = true
-}
-
-function getCompletionClass(pct) {
-  if (pct === 100) return 'tag-success'
-  if (pct >= 67) return 'tag-caution'
-  return 'tag-danger'
-}
+const corePct = computed(() => getCoreCompletionPercent(props.employee))
+const contribPts = computed(() => getContributionPoints(props.employee))
+const totalPts = computed(() => getTotalPoints(props.employee))
+const scorePct = computed(() => Math.min(Math.round(totalPts.value / 400 * 100), 100))
+function approve() { isApproved.value = true }
 </script>
 
 <template>
   <teleport to="body">
-    <transition name="drawer">
-      <div class="fixed inset-0 z-50 flex items-stretch justify-end">
-        <!-- Backdrop -->
-        <div class="drawer-backdrop absolute inset-0 bg-sand-900/40 backdrop-blur-sm" @click="emit('close')"></div>
-
-        <!-- Panel -->
-        <div class="drawer-panel relative z-10 w-full max-w-lg bg-white shadow-2xl overflow-y-auto">
-          <div class="p-6 space-y-6">
-            <!-- Header -->
-            <div class="flex items-start justify-between">
-              <div class="flex items-center gap-4">
-                <div :class="[employee.avatarColor, 'w-12 h-12 rounded-xl flex items-center justify-center text-white text-base font-bold shadow-sm']">
-                  {{ employee.initials }}
-                </div>
-                <div>
-                  <h3 class="text-lg font-bold text-sand-900 font-body">{{ employee.name }}</h3>
-                  <p class="text-sm text-sand-400">{{ employee.role }} · {{ employee.id }}</p>
-                </div>
-              </div>
-              <button @click="emit('close')" class="btn-ghost p-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256" fill="currentColor">
-                  <path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/>
-                </svg>
-              </button>
+    <div class="fixed inset-0 z-50 flex items-stretch justify-end">
+      <div class="absolute inset-0 bg-surface-dark/50 backdrop-blur-sm" @click="emit('close')"></div>
+      <div class="relative z-10 w-full max-w-md bg-surface-white shadow-xl overflow-y-auto animate-slide-right">
+        <div class="p-5 space-y-5">
+          <!-- Header -->
+          <div class="flex items-start justify-between">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-brand-primary text-white text-sm font-bold flex items-center justify-center">{{ employee.initials }}</div>
+              <div><h3 class="text-sm font-bold text-txt-heading">{{ employee.name }}</h3><p class="text-xs text-txt-disabled">{{ employee.role }} · {{ employee.id }}</p></div>
             </div>
-
-            <!-- Score Summary -->
-            <div class="flex items-center gap-6 p-5 rounded-2xl bg-gradient-to-r from-ocean-50 to-sand-50 border border-ocean-100">
-              <ProgressRing
-                :percentage="scorePercent"
-                :size="90"
-                :strokeWidth="7"
-                :color="scoreColor"
-                bgColor="#e6e2da"
-              />
-              <div class="space-y-1">
-                <p class="text-2xl font-bold text-sand-900 font-body">{{ totalScore }} <span class="text-sm text-sand-400 font-normal">pts</span></p>
-                <p class="text-sm text-sand-500">Total Score</p>
-                <span class="tag" :class="getCompletionClass(coreCompletionPct)">Core: {{ coreCompletionPct }}%</span>
+            <button @click="emit('close')" class="btn-ghost p-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button>
+          </div>
+          <!-- Score -->
+          <div class="flex items-center gap-5 p-4 rounded-card bg-surface-gray border border-line">
+            <ProgressRing :percentage="scorePct" :size="80" :strokeWidth="6" color="#03439a" bgColor="#e5e7eb" />
+            <div><p class="text-xl font-bold text-txt-heading">{{ totalPts }} <span class="text-xs text-txt-disabled font-normal">pts</span></p><p class="text-xs text-txt-subtitle">Total Score</p><span class="tag mt-1" :class="corePct === 100 ? 'tag-success' : 'tag-danger'">Core: {{ corePct }}%</span></div>
+          </div>
+          <!-- Commitments -->
+          <div>
+            <h4 class="text-[11px] font-semibold text-txt-disabled uppercase tracking-wider mb-2">Core Commitments</h4>
+            <div class="space-y-1.5">
+              <div v-for="c in employee.coreCommitments" :key="c.id" class="flex items-center justify-between p-2.5 rounded-container border" :class="c.status==='on-track'?'bg-green-50/50 border-green-200/60':'bg-red-50/50 border-red-200/60'">
+                <div class="flex items-center gap-2"><div class="w-1.5 h-1.5 rounded-full" :class="c.status==='on-track'?'bg-green-500':'bg-red-500'"></div><span class="text-sm text-txt-body">{{ c.label }}</span></div>
+                <span class="tag text-[10px]" :class="c.status==='on-track'?'tag-success':'tag-danger'">{{ c.status==='on-track'?'On Track':'Missed' }}</span>
               </div>
             </div>
-
-            <!-- Core Commitments Detail -->
-            <div>
-              <h4 class="text-sm font-semibold text-sand-700 mb-3 uppercase tracking-wider">Core Commitments</h4>
-              <div class="space-y-2">
-                <div
-                  v-for="c in employee.coreCommitments"
-                  :key="c.id"
-                  class="flex items-center justify-between p-3 rounded-xl border"
-                  :class="c.status === 'on-track' ? 'bg-emerge-50/40 border-emerge-200/60' : 'bg-danger-50/40 border-danger-200/60'"
-                >
-                  <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 rounded-full" :class="c.status === 'on-track' ? 'bg-emerge-500' : 'bg-danger-500'"></div>
-                    <span class="text-sm text-sand-700">{{ c.label }}</span>
-                  </div>
-                  <span class="tag text-[10px]" :class="c.status === 'on-track' ? 'tag-success' : 'tag-danger'">
-                    {{ c.status === 'on-track' ? 'On Track' : 'Missed' }}
-                  </span>
-                </div>
+          </div>
+          <!-- Contributions -->
+          <div>
+            <h4 class="text-[11px] font-semibold text-txt-disabled uppercase tracking-wider mb-2">Contributions ({{ contribPts }} pts)</h4>
+            <div v-if="employee.contributions.length" class="space-y-1.5">
+              <div v-for="c in employee.contributions" :key="c.id" class="flex items-center justify-between p-2.5 rounded-container bg-surface-gray border border-line/50">
+                <div><p class="text-sm text-txt-body">{{ c.type }}</p><p class="text-[11px] text-txt-disabled">{{ formatDate(c.date) }}</p></div>
+                <span class="tag tag-info text-[10px]">+{{ c.points }}</span>
               </div>
             </div>
-
-            <!-- Contributions Detail -->
-            <div>
-              <h4 class="text-sm font-semibold text-sand-700 mb-3 uppercase tracking-wider">Contributions ({{ contributionPoints }} pts)</h4>
-              <div v-if="employee.contributions.length" class="space-y-2">
-                <div
-                  v-for="c in employee.contributions"
-                  :key="c.id"
-                  class="flex items-center justify-between p-3 rounded-xl bg-sand-50 border border-sand-100"
-                >
-                  <div class="min-w-0">
-                    <p class="text-sm font-medium text-sand-700 truncate">{{ c.type }}</p>
-                    <p class="text-[11px] text-sand-400">{{ formatDate(c.date) }}</p>
-                  </div>
-                  <span class="tag tag-info shrink-0 ml-3">+{{ c.points }} pts</span>
-                </div>
-              </div>
-              <div v-else class="text-sm text-sand-400 text-center py-4">No contributions logged</div>
-            </div>
-
-            <!-- Carry Forward -->
-            <div class="p-4 rounded-xl bg-caution-50 border border-caution-200/60">
-              <div class="flex items-center justify-between">
-                <span class="text-sm text-caution-700 font-medium">Carry-Forward Points</span>
-                <span class="text-lg font-bold text-caution-700">{{ employee.carryForward }}</span>
-              </div>
-              <p class="text-xs text-caution-500 mt-1">Carried from previous month</p>
-            </div>
-
-            <!-- Actions -->
-            <div class="flex gap-3 pt-2">
-              <button v-if="!isApproved" @click="approve" class="btn-primary flex-1 py-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor">
-                  <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/>
-                </svg>
-                Approve Evaluation
-              </button>
-              <div v-else class="flex-1 text-center py-3 bg-emerge-50 rounded-xl border border-emerge-200">
-                <p class="text-sm font-bold text-emerge-600 flex items-center justify-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor">
-                    <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,85.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z"/>
-                  </svg>
-                  Approved ✓
-                </p>
-              </div>
-              <button @click="emit('close')" class="btn-secondary px-6 py-3">
-                Close
-              </button>
-            </div>
+            <p v-else class="text-sm text-txt-disabled text-center py-3">No contributions</p>
+          </div>
+          <!-- Carry forward -->
+          <div class="p-3 rounded-container bg-surface-warn border border-yellow-200/60 flex items-center justify-between">
+            <span class="text-sm text-txt-warn font-medium">Carry-Forward</span>
+            <span class="text-base font-bold text-txt-warn">{{ employee.carryForward }}</span>
+          </div>
+          <!-- Actions -->
+          <div class="flex gap-2 pt-1">
+            <button v-if="!isApproved" @click="approve" class="btn-primary flex-1">Approve</button>
+            <div v-else class="flex-1 text-center py-2 bg-surface-success rounded-button border border-green-200"><p class="text-sm font-bold text-txt-success">✓ Approved</p></div>
+            <button @click="emit('close')" class="btn-secondary flex-1">Close</button>
           </div>
         </div>
       </div>
-    </transition>
+    </div>
   </teleport>
 </template>
