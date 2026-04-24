@@ -66,6 +66,15 @@ function logout() {
         <svg v-if="item.icon === 'projects'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor"><path d="M216,72H131.31L104,44.69A15.86,15.86,0,0,0,92.69,40H40A16,16,0,0,0,24,56V200.62A15.4,15.4,0,0,0,39.38,216H216.89A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72ZM40,56H92.69l16,16H40ZM216,200H40V88H216Z"/></svg>
         <span>{{ item.label }}</span>
       </div>
+
+      <!-- Divider + Changelog -->
+      <div class="border-t border-white/10 mt-3 pt-3">
+        <div :class="['sidebar-item', { active: isActive('/changelog') }]" @click="navigate('/changelog')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"/></svg>
+          <span>Changelog</span>
+          <span class="ml-auto text-[9px] font-bold bg-brand-primary text-white px-1.5 py-0.5 rounded">v1.2</span>
+        </div>
+      </div>
     </nav>
 
     <!-- User -->
