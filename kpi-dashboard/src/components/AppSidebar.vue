@@ -51,7 +51,7 @@ function logout() {
     <div class="px-5 py-5 flex items-center gap-3 border-b border-white/10">
       <div class="w-8 h-8 bg-brand-primary text-white rounded-lg flex items-center justify-center text-sm font-bold">P</div>
       <div class="flex-1 min-w-0">
-        <span class="text-white font-semibold text-sm block">GrowthPulse</span>
+        <span class="text-white font-semibold text-sm block">PMS</span>
         <span v-if="projectName" class="text-[10px] text-white/40 block truncate">{{ projectName }}</span>
       </div>
     </div>

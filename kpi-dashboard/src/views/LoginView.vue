@@ -33,8 +33,8 @@ async function handleLogin() {
     <div class="w-full max-w-sm animate-fade-in">
       <div class="text-center mb-8">
         <div class="inline-flex items-center justify-center w-12 h-12 bg-brand-primary text-white rounded-xl mb-4 text-xl font-bold">P</div>
-        <h1 class="text-xl font-bold text-txt-heading">GrowthPulse</h1>
-        <p class="text-xs text-txt-subtitle mt-1">KPI Evaluation & L&D Dashboard</p>
+        <h1 class="text-xl font-bold text-txt-heading">PMS</h1>
+        <p class="text-xs text-txt-subtitle mt-1">Performance Management System</p>
       </div>
 
       <div class="card p-6">

@@ -22,7 +22,7 @@ const roleTag = computed(() => {
   <header class="bg-surface-white border-b border-line px-6 py-3 flex items-center justify-between shrink-0">
     <div>
       <slot name="title">
-        <h2 class="text-base font-bold text-txt-heading">GrowthPulse</h2>
+        <h2 class="text-base font-bold text-txt-heading">PMS</h2>
       </slot>
     </div>
     <div class="flex items-center gap-3">
