@@ -29,64 +29,58 @@ async function handleLogin() {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-surface-bg px-4">
-    <div class="w-full max-w-sm animate-fade-in">
-      <!-- Brand -->
-      <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-12 h-12 bg-brand-primary text-white rounded-xl mb-4 text-xl font-bold shadow-xs">P</div>
-        <h1 class="text-xl font-bold text-txt-heading">PMS</h1>
-        <p class="text-sm text-txt-subtitle mt-1">Performance Management System</p>
-      </div>
+  <div class="min-h-screen flex items-center justify-center bg-[#f5f5f5] px-4">
+    <div class="w-full max-w-[400px] animate-fade-in">
+      <!-- Card — no visible border, just white on light gray like Skool -->
+      <div class="bg-white rounded-xl shadow-[0_1px_4px_rgba(0,0,0,0.08)] px-10 py-10">
+        <!-- Brand -->
+        <div class="text-center mb-8">
+          <h1 class="text-2xl font-bold tracking-tight">
+            <span class="text-[#4285f4]">P</span><span class="text-[#ea4335]">M</span><span class="text-[#fbbc05]">S</span>
+          </h1>
+          <p class="text-[15px] font-bold text-txt-heading mt-3">Log in to PMS</p>
+        </div>
 
-      <!-- Login Card -->
-      <div class="card p-7">
-        <h2 class="text-base font-bold text-txt-heading mb-1">Sign In</h2>
-        <p class="text-sm text-txt-subtitle mb-6">Enter your Staff ID to continue</p>
+        <form @submit.prevent="handleLogin" class="space-y-3">
+          <!-- Staff ID input — no label, placeholder only like Skool -->
+          <input
+            v-model="staffId"
+            type="text"
+            placeholder="Staff ID"
+            autocomplete="off"
+            class="w-full px-4 py-3 bg-white text-[15px] text-txt-body border border-[#ddd] rounded-lg placeholder-[#aaa] focus:outline-none focus:border-[#4285f4] transition-colors"
+          />
 
-        <form @submit.prevent="handleLogin" class="space-y-5">
-          <div>
-            <label for="staffId" class="block text-sm font-medium text-txt-body mb-1.5">Staff ID</label>
-            <input id="staffId" v-model="staffId" type="text" placeholder="e.g. PM001" class="input-field" autocomplete="off" />
-            <p v-if="error" class="mt-2 text-xs text-txt-error flex items-center gap-1.5">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm-8,56a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm8,104a12,12,0,1,1,12-12A12,12,0,0,1,128,184Z"/></svg>
-              {{ error }}
-            </p>
+          <!-- Error -->
+          <p v-if="error" class="text-xs text-txt-error flex items-center gap-1.5 px-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm-8,56a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm8,104a12,12,0,1,1,12-12A12,12,0,0,1,128,184Z"/></svg>
+            {{ error }}
+          </p>
+
+          <!-- Link row -->
+          <div class="text-left">
+            <span class="text-[13px] text-[#4285f4] cursor-pointer hover:underline">Need a demo account?</span>
           </div>
-          <button type="submit" class="btn-primary w-full" :disabled="isLoading" :class="{ 'opacity-60': isLoading }">
-            <svg v-if="isLoading" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
-            {{ isLoading ? 'Signing in…' : 'Sign In' }}
+
+          <!-- Submit — Skool-style uppercase, full width -->
+          <button
+            type="submit"
+            :disabled="isLoading || !staffId.trim()"
+            class="w-full py-3 rounded-lg text-[13px] font-bold uppercase tracking-wider transition-all"
+            :class="staffId.trim() && !isLoading
+              ? 'bg-[#4285f4] text-white hover:bg-[#3b78e7] shadow-sm'
+              : 'bg-[#f0f0f0] text-[#bbb] cursor-not-allowed'"
+          >
+            <svg v-if="isLoading" class="animate-spin h-4 w-4 inline mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path></svg>
+            {{ isLoading ? 'Signing in…' : 'Log In' }}
           </button>
         </form>
 
-        <!-- Demo credentials -->
-        <div class="mt-6 space-y-2">
-          <p class="text-[11px] font-semibold text-txt-muted uppercase tracking-wider mb-2">Demo Accounts</p>
-          <div class="p-3 bg-surface-gray rounded-container">
-            <div class="flex items-center justify-between">
-              <span class="text-xs text-txt-subtitle">Project Director</span>
-              <code class="text-xs font-mono font-semibold text-txt-heading bg-white px-2 py-0.5 rounded border border-line">PD001</code>
-            </div>
-          </div>
-          <div class="p-3 bg-surface-gray rounded-container">
-            <div class="flex items-center justify-between">
-              <span class="text-xs text-txt-subtitle">Project Managers</span>
-              <div class="flex gap-1.5">
-                <code class="text-xs font-mono font-semibold text-txt-heading bg-white px-2 py-0.5 rounded border border-line">PM001</code>
-                <code class="text-xs font-mono font-semibold text-txt-heading bg-white px-2 py-0.5 rounded border border-line">PM002</code>
-              </div>
-            </div>
-          </div>
-          <div class="p-3 bg-surface-gray rounded-container">
-            <div class="flex items-center justify-between">
-              <span class="text-xs text-txt-subtitle">Staff</span>
-              <div class="flex gap-1.5">
-                <code class="text-xs font-mono font-semibold text-txt-heading bg-white px-2 py-0.5 rounded border border-line">EMP001</code>
-                <span class="text-[10px] text-txt-muted">–</span>
-                <code class="text-xs font-mono font-semibold text-txt-heading bg-white px-2 py-0.5 rounded border border-line">EMP006</code>
-              </div>
-            </div>
-          </div>
-        </div>
+        <!-- Footer -->
+        <p class="text-center text-[13px] text-txt-subtitle mt-6">
+          Demo? Try <span class="text-[#4285f4] font-semibold cursor-pointer hover:underline" @click="staffId = 'PM001'">PM001</span>
+          or <span class="text-[#4285f4] font-semibold cursor-pointer hover:underline" @click="staffId = 'PD001'">PD001</span>
+        </p>
       </div>
     </div>
   </div>
