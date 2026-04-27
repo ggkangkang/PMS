@@ -31,21 +31,23 @@ async function handleLogin() {
 <template>
   <div class="min-h-screen flex items-center justify-center bg-surface-bg px-4">
     <div class="w-full max-w-sm animate-fade-in">
+      <!-- Brand -->
       <div class="text-center mb-8">
-        <div class="inline-flex items-center justify-center w-12 h-12 bg-brand-primary text-white rounded-xl mb-4 text-xl font-bold">P</div>
+        <div class="inline-flex items-center justify-center w-12 h-12 bg-brand-primary text-white rounded-xl mb-4 text-xl font-bold shadow-xs">P</div>
         <h1 class="text-xl font-bold text-txt-heading">PMS</h1>
-        <p class="text-xs text-txt-subtitle mt-1">Performance Management System</p>
+        <p class="text-sm text-txt-subtitle mt-1">Performance Management System</p>
       </div>
 
-      <div class="card p-6">
+      <!-- Login Card -->
+      <div class="card p-7">
         <h2 class="text-base font-bold text-txt-heading mb-1">Sign In</h2>
-        <p class="text-xs text-txt-subtitle mb-5">Enter your Staff ID to continue</p>
+        <p class="text-sm text-txt-subtitle mb-6">Enter your Staff ID to continue</p>
 
-        <form @submit.prevent="handleLogin" class="space-y-4">
+        <form @submit.prevent="handleLogin" class="space-y-5">
           <div>
             <label for="staffId" class="block text-sm font-medium text-txt-body mb-1.5">Staff ID</label>
             <input id="staffId" v-model="staffId" type="text" placeholder="e.g. PM001" class="input-field" autocomplete="off" />
-            <p v-if="error" class="mt-1.5 text-xs text-txt-error flex items-center gap-1">
+            <p v-if="error" class="mt-2 text-xs text-txt-error flex items-center gap-1.5">
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm-8,56a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm8,104a12,12,0,1,1,12-12A12,12,0,0,1,128,184Z"/></svg>
               {{ error }}
             </p>
@@ -56,18 +58,33 @@ async function handleLogin() {
           </button>
         </form>
 
-        <div class="mt-5 space-y-2">
-          <div class="p-2.5 bg-surface-info rounded-container border border-blue-200/50">
-            <p class="text-[11px] font-semibold text-txt-info mb-0.5">Project Director</p>
-            <p class="text-[11px] text-txt-info"><code class="font-mono bg-white/60 px-1 rounded">PD001</code></p>
+        <!-- Demo credentials -->
+        <div class="mt-6 space-y-2">
+          <p class="text-[11px] font-semibold text-txt-muted uppercase tracking-wider mb-2">Demo Accounts</p>
+          <div class="p-3 bg-surface-gray rounded-container">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-txt-subtitle">Project Director</span>
+              <code class="text-xs font-mono font-semibold text-txt-heading bg-white px-2 py-0.5 rounded border border-line">PD001</code>
+            </div>
           </div>
-          <div class="p-2.5 bg-surface-warn rounded-container border border-orange-200/50">
-            <p class="text-[11px] font-semibold text-txt-warn mb-0.5">Project Managers</p>
-            <p class="text-[11px] text-txt-warn"><code class="font-mono bg-white/60 px-1 rounded">PM001</code> (Forum 2) · <code class="font-mono bg-white/60 px-1 rounded">PM002</code> (AR496)</p>
+          <div class="p-3 bg-surface-gray rounded-container">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-txt-subtitle">Project Managers</span>
+              <div class="flex gap-1.5">
+                <code class="text-xs font-mono font-semibold text-txt-heading bg-white px-2 py-0.5 rounded border border-line">PM001</code>
+                <code class="text-xs font-mono font-semibold text-txt-heading bg-white px-2 py-0.5 rounded border border-line">PM002</code>
+              </div>
+            </div>
           </div>
-          <div class="p-2.5 bg-surface-success rounded-container border border-green-200/50">
-            <p class="text-[11px] font-semibold text-txt-success mb-0.5">Staff</p>
-            <p class="text-[11px] text-txt-success"><code class="font-mono bg-white/60 px-1 rounded">EMP001</code> – <code class="font-mono bg-white/60 px-1 rounded">EMP006</code></p>
+          <div class="p-3 bg-surface-gray rounded-container">
+            <div class="flex items-center justify-between">
+              <span class="text-xs text-txt-subtitle">Staff</span>
+              <div class="flex gap-1.5">
+                <code class="text-xs font-mono font-semibold text-txt-heading bg-white px-2 py-0.5 rounded border border-line">EMP001</code>
+                <span class="text-[10px] text-txt-muted">–</span>
+                <code class="text-xs font-mono font-semibold text-txt-heading bg-white px-2 py-0.5 rounded border border-line">EMP006</code>
+              </div>
+            </div>
           </div>
         </div>
       </div>

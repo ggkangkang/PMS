@@ -83,7 +83,7 @@ function ratingBg(v) {
 }
 
 function handleSubmit() { isSubmitted.value = true; showSubmitModal.value = false }
-function gradeColor(g) { return g === 'emerge' ? '#008236' : g === 'ocean' ? '#03439a' : g === 'caution' ? '#ca3500' : '#c10007' }
+function gradeColor(g) { return g === 'emerge' ? '#008236' : g === 'ocean' ? '#2563eb' : g === 'caution' ? '#ca3500' : '#c10007' }
 
 const sections = computed(() => {
   const s = [
@@ -99,7 +99,7 @@ const sections = computed(() => {
 <template>
   <div class="max-w-5xl mx-auto animate-fade-in">
     <!-- Header -->
-    <div class="card p-5 mb-5">
+    <div class="card p-6 mb-6">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-4">
           <div :class="[currentUser.avatarColor || 'bg-brand-primary', 'w-10 h-10 rounded-full text-white text-sm font-bold flex items-center justify-center']">{{ currentUser.initials || '?' }}</div>
@@ -124,19 +124,21 @@ const sections = computed(() => {
       </div>
     </div>
 
-    <!-- Tabs -->
-    <div class="flex gap-1.5 mb-5 border-b border-line pb-px">
+
+    <!-- Tabs — Skool-style underline -->
+    <div class="flex gap-0 mb-6 border-b border-line">
       <button v-for="s in sections" :key="s.id" @click="activeSection = s.id"
-        class="px-4 py-2 text-sm font-medium transition-colors rounded-t-btn border-b-2 -mb-px"
-        :class="activeSection === s.id ? 'border-brand-primary text-brand-primary bg-white' : 'border-transparent text-txt-subtitle hover:text-txt-body'"
+        :class="['nav-tab', { active: activeSection === s.id }]"
       >{{ s.label }} <span v-if="s.weight" class="text-[10px] opacity-60">({{ s.weight }})</span></button>
     </div>
 
     <!-- ═══ COMMITMENTS ═══ -->
     <div v-if="activeSection === 'commitments'" class="animate-fade-in">
-      <fieldset class="card p-5">
-        <legend class="text-sm font-bold text-txt-heading px-1">Core KPI Commitments <span class="tag tag-info text-[10px] ml-2">50%</span></legend>
-        <p class="text-xs text-txt-subtitle mb-5 mt-1">Rate your {{ formatMonth(selectedMonth) }} performance. Each KPI = 10%.</p>
+      <div class="card p-6">
+        <div class="mb-5">
+          <h3 class="text-[15px] font-bold text-txt-heading">Core KPI Commitments <span class="tag tag-info text-[10px] ml-2">50%</span></h3>
+          <p class="text-sm text-txt-subtitle mt-1">Rate your {{ formatMonth(selectedMonth) }} performance. Each KPI = 10%.</p>
+        </div>
         <div class="space-y-4">
           <div v-for="kpi in kpis" :key="kpi.id" class="p-4 rounded-container border border-line bg-surface-gray/30">
             <div class="flex items-start justify-between gap-3 mb-3">
@@ -162,14 +164,16 @@ const sections = computed(() => {
           <label class="text-sm font-medium text-txt-body mb-1.5 block">Quick Notes</label>
           <textarea v-model="form.notes" :disabled="isSubmitted" rows="3" class="input-field text-sm resize-none" placeholder="Key highlights for this month…"></textarea>
         </div>
-      </fieldset>
+      </div>
     </div>
 
     <!-- ═══ CONTRIBUTIONS ═══ -->
     <div v-if="activeSection === 'contributions'" class="animate-fade-in">
-      <fieldset class="card p-5">
-        <legend class="text-sm font-bold text-txt-heading px-1">Contributions <span class="tag tag-info text-[10px] ml-2">30%</span></legend>
-        <p class="text-xs text-txt-subtitle mb-5 mt-1">Log extra initiatives for {{ formatMonth(selectedMonth) }}.</p>
+      <div class="card p-6">
+        <div class="mb-5">
+          <h3 class="text-[15px] font-bold text-txt-heading">Contributions <span class="tag tag-info text-[10px] ml-2">30%</span></h3>
+          <p class="text-sm text-txt-subtitle mt-1">Log extra initiatives for {{ formatMonth(selectedMonth) }}.</p>
+        </div>
         <!-- Add -->
         <div v-if="!isSubmitted" class="flex gap-2 mb-5">
           <select v-model="selectedContrib" class="select-field flex-1">
@@ -179,37 +183,41 @@ const sections = computed(() => {
           <button @click="addContrib" class="btn-primary shrink-0" :disabled="!selectedContrib" :class="{ 'opacity-40': !selectedContrib }">+ Log</button>
         </div>
         <!-- Stats -->
-        <div class="grid grid-cols-3 gap-3 mb-5">
-          <div class="p-3 rounded-container bg-surface-info border border-blue-200/50 text-center">
-            <p class="text-xl font-bold text-brand-primary">{{ contribPts }}</p>
-            <p class="text-[10px] text-txt-info mt-0.5">Total Points</p>
-          </div>
-          <div class="p-3 rounded-container bg-surface-gray border border-line text-center">
-            <p class="text-xl font-bold text-txt-heading">{{ contributionBaseline.minimumPoints }}</p>
-            <p class="text-[10px] text-txt-disabled mt-0.5">Baseline</p>
-          </div>
-          <div class="p-3 rounded-container border text-center" :class="contribTier.score >= 3 ? 'bg-surface-success border-green-200/60' : 'bg-surface-warn border-yellow-200/60'">
-            <p class="text-xl font-bold" :class="contribTier.score >= 3 ? 'text-txt-success' : 'text-txt-warn'">{{ contribTier.score }}/5</p>
-            <p class="text-[10px] mt-0.5" :class="contribTier.score >= 3 ? 'text-txt-success' : 'text-txt-warn'">{{ contribTier.label }}</p>
+        <div class="card mb-5 border border-line">
+          <div class="flex items-center justify-center py-4">
+            <div class="stat-block">
+              <p class="stat-value text-brand-primary">{{ contribPts }}</p>
+              <p class="stat-label">Total Points</p>
+            </div>
+            <div class="stat-block">
+              <p class="stat-value">{{ contributionBaseline.minimumPoints }}</p>
+              <p class="stat-label">Baseline</p>
+            </div>
+            <div class="stat-block">
+              <p class="stat-value" :class="contribTier.score >= 3 ? 'text-txt-success' : 'text-txt-warn'">{{ contribTier.score }}/5</p>
+              <p class="stat-label">{{ contribTier.label }}</p>
+            </div>
           </div>
         </div>
         <!-- Log -->
-        <h4 class="text-[11px] font-semibold text-txt-disabled uppercase tracking-wider mb-2">Contribution Log</h4>
+        <h4 class="text-[11px] font-semibold text-txt-muted uppercase tracking-wider mb-2">Contribution Log</h4>
         <div v-if="form.contributions.length" class="space-y-1.5">
           <div v-for="c in form.contributions" :key="c.id" class="flex items-center justify-between p-2.5 rounded-container bg-surface-gray border border-line/50">
             <span class="text-sm text-txt-body">{{ c.type }}</span>
             <span class="tag tag-info text-[10px]">+{{ c.points }}</span>
           </div>
         </div>
-        <p v-else class="text-sm text-txt-disabled text-center py-4">No contributions logged yet</p>
-      </fieldset>
+        <p v-else class="text-sm text-txt-muted text-center py-6">No contributions logged yet</p>
+      </div>
     </div>
 
     <!-- ═══ CHARACTER (quarterly) ═══ -->
     <div v-if="activeSection === 'character' && isQuarterEnd" class="animate-fade-in">
-      <fieldset class="card p-5">
-        <legend class="text-sm font-bold text-txt-heading px-1">Character & Behavioral Traits <span class="tag tag-info text-[10px] ml-2">20% · {{ quarter }}</span></legend>
-        <p class="text-xs text-txt-subtitle mb-5 mt-1">Quarterly self-assessment. Rate how consistently you demonstrate each trait.</p>
+      <div class="card p-6">
+        <div class="mb-5">
+          <h3 class="text-[15px] font-bold text-txt-heading">Character & Behavioral Traits <span class="tag tag-info text-[10px] ml-2">20% · {{ quarter }}</span></h3>
+          <p class="text-sm text-txt-subtitle mt-1">Quarterly self-assessment. Rate how consistently you demonstrate each trait.</p>
+        </div>
         <div class="space-y-4">
           <div v-for="trait in characterTraits" :key="trait.id" class="p-4 rounded-container border border-line bg-surface-gray/30">
             <div class="flex items-start justify-between gap-3 mb-3">
@@ -224,13 +232,13 @@ const sections = computed(() => {
             </div>
           </div>
         </div>
-      </fieldset>
+      </div>
     </div>
 
     <!-- ═══ SUMMARY ═══ -->
     <div v-if="activeSection === 'summary'" class="space-y-4 animate-fade-in">
-      <div class="card p-5">
-        <h3 class="text-sm font-bold text-txt-heading mb-4">{{ formatMonth(selectedMonth) }} Summary</h3>
+      <div class="card p-6">
+        <h3 class="text-[15px] font-bold text-txt-heading mb-5">{{ formatMonth(selectedMonth) }} Summary</h3>
         <div class="flex flex-col sm:flex-row items-center gap-6">
           <ProgressRing :percentage="overallPct" :size="130" :strokeWidth="10" :color="gradeColor(grade.color)" bgColor="#e5e7eb" />
           <div class="text-center sm:text-left">
@@ -240,8 +248,8 @@ const sections = computed(() => {
           </div>
         </div>
       </div>
-      <div class="card p-5">
-        <h4 class="text-[11px] font-semibold text-txt-disabled uppercase tracking-wider mb-4">Score Breakdown</h4>
+      <div class="card p-6">
+        <h4 class="text-[11px] font-semibold text-txt-muted uppercase tracking-wider mb-4">Score Breakdown</h4>
         <div class="space-y-3">
           <div><div class="flex justify-between text-sm mb-1"><span class="text-txt-body font-medium">Commitments (50%)</span><span class="font-bold text-txt-heading">{{ commitScore }}/50</span></div><div class="h-2.5 bg-surface-gray rounded-full overflow-hidden"><div class="h-full rounded-full bg-brand-primary transition-all duration-500" :style="{ width: (commitScore/50*100)+'%' }"></div></div></div>
           <div><div class="flex justify-between text-sm mb-1"><span class="text-txt-body font-medium">Contributions (30%)</span><span class="font-bold text-txt-heading">{{ contribScore }}/30</span></div><div class="h-2.5 bg-surface-gray rounded-full overflow-hidden"><div class="h-full rounded-full bg-yellow-500 transition-all duration-500" :style="{ width: (contribScore/30*100)+'%' }"></div></div></div>
@@ -250,15 +258,15 @@ const sections = computed(() => {
         </div>
       </div>
       <!-- Supervisor feedback (read-only) -->
-      <div v-if="evalData?.supervisor" class="card p-5">
-        <h4 class="text-[11px] font-semibold text-txt-disabled uppercase tracking-wider mb-3">Supervisor Feedback</h4>
+      <div v-if="evalData?.supervisor" class="card p-6">
+        <h4 class="text-[11px] font-semibold text-txt-muted uppercase tracking-wider mb-3">Supervisor Feedback</h4>
         <div class="p-4 bg-surface-info/50 rounded-container border border-blue-200/40">
           <p class="text-sm text-txt-body">{{ evalData.supervisor.notes }}</p>
           <p class="text-[11px] text-txt-disabled mt-2">— Rated by {{ evalData.supervisor.ratedBy }} on {{ evalData.supervisor.ratedAt }}</p>
         </div>
       </div>
       <!-- Submit -->
-      <div v-if="!isSubmitted" class="card p-5 flex items-center justify-between">
+      <div v-if="!isSubmitted" class="card p-6 flex items-center justify-between">
         <div><h4 class="text-sm font-semibold text-txt-heading">Ready to submit?</h4><p class="text-xs text-txt-subtitle mt-0.5">Your evaluation will be sent to your supervisor.</p></div>
         <button @click="showSubmitModal = true" class="btn-primary">Submit</button>
       </div>
@@ -271,8 +279,8 @@ const sections = computed(() => {
     <!-- Submit Modal -->
     <teleport to="body">
       <div v-if="showSubmitModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div class="absolute inset-0 bg-surface-dark/50 backdrop-blur-sm" @click="showSubmitModal = false"></div>
-        <div class="relative z-10 bg-white rounded-card shadow-xl max-w-sm w-full p-5 border border-line animate-scale-in">
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="showSubmitModal = false"></div>
+        <div class="relative z-10 bg-white rounded-card shadow-xl max-w-sm w-full p-6 border border-line animate-scale-in">
           <h3 class="text-base font-bold text-txt-heading mb-2">Submit {{ formatMonth(selectedMonth) }} Evaluation?</h3>
           <p class="text-sm text-txt-subtitle mb-5">You won't be able to edit after submission.</p>
           <div class="flex gap-2"><button @click="showSubmitModal = false" class="btn-secondary flex-1">Cancel</button><button @click="handleSubmit" class="btn-primary flex-1">Confirm</button></div>

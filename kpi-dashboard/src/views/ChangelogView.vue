@@ -58,7 +58,7 @@ function typeIcon(type) {
 
 function typeCls(type) {
   if (type === 'feature') return 'text-brand-primary'
-  if (type === 'improvement') return 'text-txt-info'
+  if (type === 'improvement') return 'text-brand-primary/70'
   if (type === 'fix') return 'text-txt-success'
   return 'text-txt-subtitle'
 }
@@ -68,7 +68,7 @@ function typeCls(type) {
   <div class="max-w-3xl mx-auto animate-fade-in">
     <div class="mb-6">
       <h1 class="text-lg font-bold text-txt-heading">Changelog</h1>
-      <p class="text-xs text-txt-subtitle mt-0.5">Version history and release notes</p>
+      <p class="text-sm text-txt-subtitle mt-0.5">Version history and release notes</p>
     </div>
 
     <div class="relative">
@@ -84,7 +84,7 @@ function typeCls(type) {
           <div class="flex items-center gap-3 mb-3">
             <h2 class="text-base font-bold text-txt-heading">v{{ v.version }}</h2>
             <span v-if="v.tag" class="tag" :class="v.tagCls">{{ v.tag }}</span>
-            <span class="text-xs text-txt-disabled ml-auto">{{ v.date }}</span>
+            <span class="text-sm text-txt-muted ml-auto">{{ v.date }}</span>
           </div>
 
           <ul class="space-y-1.5">

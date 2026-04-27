@@ -7,27 +7,25 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Brand
-        'brand-primary': '#03439a',
-        'brand-strong': '#02367b',
+        // Brand — Skool-style brighter blue accent
+        'brand-primary': '#2563eb',
+        'brand-strong': '#1d4ed8',
         'brand-secondary': '#f0c10f',
-        // Surfaces
+        // Surfaces — clean whites & grays
         'surface-bg': '#f9fafb',
         'surface-white': '#ffffff',
-        'surface-dark': '#1d293d',
-        'surface-darker': '#020618',
         'surface-gray': '#f3f4f6',
         'surface-gray-strong': '#e5e7eb',
         'surface-success': '#dcfce7',
         'surface-info': '#dff2fe',
         'surface-warn': '#ffedd4',
         'surface-error': '#ffe2e2',
-        // Text
-        'txt-heading': '#020618',
-        'txt-body': '#1d293d',
-        'txt-subtitle': '#45556c',
-        'txt-muted': '#62748e',
-        'txt-disabled': '#90a1b9',
+        // Text — high contrast, Skool-style
+        'txt-heading': '#111827',
+        'txt-body': '#374151',
+        'txt-subtitle': '#6b7280',
+        'txt-muted': '#9ca3af',
+        'txt-disabled': '#9ca3af',
         'txt-on-primary': '#ffffff',
         'txt-success': '#008236',
         'txt-info': '#0069a8',
@@ -35,20 +33,22 @@ export default {
         'txt-error': '#c10007',
         // Borders
         'line': '#e5e7eb',
-        'line-secondary': '#cad5e2',
+        'line-secondary': '#d1d5db',
       },
       fontFamily: {
         sans: ['"Open Sans"', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
-        'btn': '6px',
-        'tag': '6px',
+        'btn': '8px',
+        'tag': '9999px',
         'container': '8px',
         'card': '12px',
+        'pill': '9999px',
       },
       boxShadow: {
         'xs': '0 1px 2px 0 rgb(0 0 0 / 0.05)',
         'card': '0 1px 3px 0 rgb(0 0 0 / 0.04), 0 1px 2px -1px rgb(0 0 0 / 0.04)',
+        'header': '0 1px 3px 0 rgb(0 0 0 / 0.06)',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out',

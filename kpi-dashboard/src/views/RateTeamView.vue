@@ -62,12 +62,12 @@ function ratingBg(v) {
       <table class="w-full">
         <thead>
           <tr class="border-b border-line text-left">
-            <th class="px-5 py-2.5 text-[11px] font-semibold text-txt-disabled uppercase tracking-wider">Employee</th>
-            <th class="px-5 py-2.5 text-[11px] font-semibold text-txt-disabled uppercase tracking-wider">Role</th>
-            <th class="px-5 py-2.5 text-[11px] font-semibold text-txt-disabled uppercase tracking-wider text-center">Self Score</th>
-            <th class="px-5 py-2.5 text-[11px] font-semibold text-txt-disabled uppercase tracking-wider text-center">Eval Status</th>
-            <th class="px-5 py-2.5 text-[11px] font-semibold text-txt-disabled uppercase tracking-wider text-center">Your Rating</th>
-            <th class="px-5 py-2.5 text-[11px] font-semibold text-txt-disabled uppercase tracking-wider text-right">Action</th>
+            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider">Employee</th>
+            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider">Role</th>
+            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider text-center">Self Score</th>
+            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider text-center">Eval Status</th>
+            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider text-center">Your Rating</th>
+            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider text-right">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -100,7 +100,7 @@ function ratingBg(v) {
     <!-- Rating Drawer -->
     <teleport to="body">
       <div v-if="showDrawer && selectedEmployee" class="fixed inset-0 z-50 flex items-stretch justify-end">
-        <div class="absolute inset-0 bg-surface-dark/50 backdrop-blur-sm" @click="closeDrawer"></div>
+        <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="closeDrawer"></div>
         <div class="relative z-10 w-full max-w-2xl bg-surface-white shadow-xl overflow-y-auto animate-slide-right">
           <div class="p-5 space-y-5">
             <!-- Header -->
@@ -117,7 +117,7 @@ function ratingBg(v) {
 
             <!-- Dual columns -->
             <div v-if="getMonthlyEval(selectedEmployee.id, selectedMonth)">
-              <h4 class="text-[11px] font-semibold text-txt-disabled uppercase tracking-wider mb-3">KPI Commitment Ratings</h4>
+              <h4 class="text-[11px] font-semibold text-txt-muted uppercase tracking-wider mb-3">KPI Commitment Ratings</h4>
               <div class="space-y-3">
                 <div v-for="kpi in getKPIsForRole(selectedEmployee.role)" :key="kpi.id" class="p-4 rounded-container border border-line">
                   <p class="text-sm font-semibold text-txt-body mb-1">{{ kpi.label }}</p>
@@ -126,7 +126,7 @@ function ratingBg(v) {
                   <div class="grid grid-cols-2 gap-3">
                     <!-- Self -->
                     <div>
-                      <p class="text-[10px] font-semibold text-txt-disabled uppercase mb-1.5">Self Rating</p>
+                      <p class="text-[10px] font-semibold text-txt-muted uppercase mb-1.5">Self Rating</p>
                       <div class="flex gap-1">
                         <span v-for="r in commitmentRatingScale" :key="r.value"
                           class="flex-1 py-1.5 text-center rounded-btn text-[11px] font-bold border"
@@ -150,7 +150,7 @@ function ratingBg(v) {
 
               <!-- Self notes -->
               <div v-if="getMonthlyEval(selectedEmployee.id, selectedMonth)?.self?.notes" class="mt-4 p-3 bg-surface-gray rounded-container border border-line/50">
-                <p class="text-[10px] font-semibold text-txt-disabled uppercase mb-1">Employee's Notes</p>
+                <p class="text-[10px] font-semibold text-txt-muted uppercase mb-1">Employee's Notes</p>
                 <p class="text-sm text-txt-body">{{ getMonthlyEval(selectedEmployee.id, selectedMonth).self.notes }}</p>
               </div>
 

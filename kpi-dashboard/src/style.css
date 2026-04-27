@@ -8,7 +8,7 @@
 @layer base {
   body {
     font-family: 'Open Sans', system-ui, sans-serif;
-    color: #1d293d;
+    color: #374151;
     background-color: #f9fafb;
     font-size: 14px;
     line-height: 1.5;
@@ -17,27 +17,30 @@
 }
 
 @layer components {
+  /* ── Cards ── */
   .card {
     background: #ffffff;
     border-radius: 12px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   }
+
+  /* ── Buttons ── */
   .btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    background: #03439a;
+    padding: 0.5rem 1.25rem;
+    background: #2563eb;
     color: #ffffff;
     font-weight: 600;
     font-size: 0.875rem;
-    border-radius: 6px;
+    border-radius: 8px;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     transition: background-color 150ms;
   }
-  .btn-primary:hover { background: #02367b; }
+  .btn-primary:hover { background: #1d4ed8; }
   .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
   .btn-secondary {
@@ -45,14 +48,14 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.25rem;
     background: #ffffff;
-    color: #1d293d;
+    color: #374151;
     font-weight: 600;
     font-size: 0.875rem;
-    border-radius: 6px;
+    border-radius: 8px;
     border: 1px solid #e5e7eb;
-    transition: background-color 150ms;
+    transition: all 150ms;
   }
   .btn-secondary:hover { background: #f3f4f6; }
 
@@ -62,84 +65,163 @@
     justify-content: center;
     gap: 0.5rem;
     padding: 0.375rem 0.75rem;
-    color: #45556c;
+    color: #6b7280;
     font-weight: 500;
     font-size: 0.875rem;
-    border-radius: 6px;
+    border-radius: 8px;
     transition: all 150ms;
   }
-  .btn-ghost:hover { background: #f3f4f6; color: #1d293d; }
+  .btn-ghost:hover { background: #f3f4f6; color: #374151; }
 
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.25rem;
+    background: transparent;
+    color: #374151;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    transition: all 150ms;
+  }
+  .btn-outline:hover { background: #f3f4f6; border-color: #d1d5db; }
+
+  /* ── Inputs ── */
   .input-field {
     width: 100%;
     padding: 0.5rem 0.75rem;
     background: #ffffff;
-    color: #1d293d;
+    color: #374151;
     font-size: 0.875rem;
-    border-radius: 6px;
+    border-radius: 8px;
     border: 1px solid #e5e7eb;
     transition: all 150ms;
   }
-  .input-field::placeholder { color: #62748e; }
+  .input-field::placeholder { color: #9ca3af; }
   .input-field:focus {
     outline: none;
-    border-color: #03439a;
-    box-shadow: 0 0 0 3px rgba(3, 67, 154, 0.15);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
   }
 
   .select-field {
     width: 100%;
     padding: 0.5rem 2.25rem 0.5rem 0.75rem;
     background: #ffffff;
-    color: #1d293d;
+    color: #374151;
     font-size: 0.875rem;
-    border-radius: 6px;
+    border-radius: 8px;
     border: 1px solid #e5e7eb;
     appearance: none;
     cursor: pointer;
     transition: all 150ms;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 256 256'%3E%3Cpolyline points='208 96 128 176 48 96' fill='none' stroke='%2362748e' stroke-linecap='round' stroke-linejoin='round' stroke-width='24'%3E%3C/polyline%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 256 256'%3E%3Cpolyline points='208 96 128 176 48 96' fill='none' stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='24'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 10px center;
     background-size: 14px;
   }
   .select-field:focus {
     outline: none;
-    border-color: #03439a;
-    box-shadow: 0 0 0 3px rgba(3, 67, 154, 0.15);
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
   }
 
+  /* ── Tags (pill-shaped, Skool style) ── */
   .tag {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
-    padding: 0.125rem 0.5rem;
+    padding: 0.125rem 0.625rem;
     font-size: 0.75rem;
     font-weight: 600;
-    border-radius: 6px;
+    border-radius: 9999px;
   }
   .tag-success { color: #008236; background: #dcfce7; }
   .tag-danger { color: #c10007; background: #ffe2e2; }
   .tag-caution { color: #ca3500; background: #ffedd4; }
   .tag-info { color: #0069a8; background: #dff2fe; }
 
-  .sidebar-item {
-    display: flex;
+  /* ── Navigation Tabs (Skool style) ── */
+  .nav-tab {
+    display: inline-flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.625rem 0.75rem;
-    color: rgba(255, 255, 255, 0.6);
+    gap: 0.375rem;
+    padding: 0.75rem 1rem;
     font-size: 0.875rem;
     font-weight: 500;
-    border-radius: 6px;
+    color: #6b7280;
+    border-bottom: 2px solid transparent;
+    transition: all 150ms;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: #111827; }
+  .nav-tab.active {
+    color: #111827;
+    font-weight: 700;
+    border-bottom-color: #2563eb;
+  }
+
+  /* ── Filter Pills (Skool-style category chips) ── */
+  .filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.375rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    border: 1px solid #e5e7eb;
+    color: #374151;
+    background: #ffffff;
     cursor: pointer;
     transition: all 150ms;
   }
-  .sidebar-item:hover { background: rgba(255,255,255,0.1); color: #fff; }
-  .sidebar-item.active { background: #03439a; color: #fff; }
+  .filter-pill:hover { background: #f3f4f6; }
+  .filter-pill.active {
+    background: #111827;
+    color: #ffffff;
+    border-color: #111827;
+  }
+
+  /* ── Stat Block (Skool-style stats with divider) ── */
+  .stat-block {
+    text-align: center;
+    padding: 0.5rem 1rem;
+  }
+  .stat-block + .stat-block {
+    border-left: 1px solid #e5e7eb;
+  }
+  .stat-value {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.2;
+  }
+  .stat-label {
+    font-size: 0.6875rem;
+    color: #9ca3af;
+    margin-top: 0.125rem;
+  }
 }
 
+/* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #cad5e2; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #90a1b9; }
+::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+/* ── Page Transition ── */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.15s ease;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
