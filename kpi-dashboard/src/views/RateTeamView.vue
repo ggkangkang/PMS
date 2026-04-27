@@ -2,18 +2,41 @@
 import { ref, computed, reactive, watch } from 'vue'
 import {
   getSubordinates, getUserById, getMonthlyEval, getKPIsForRole,
-  commitmentRatingScale, availableMonths, formatMonth,
+  commitmentRatingScale, availableMonths, formatMonth, getProjectById,
   getCommitmentScore, getContributionPoints, getEvalStatusInfo,
 } from '../data/dummyData'
 
 const currentUser = computed(() => { try { return JSON.parse(localStorage.getItem('currentUser') || '{}') } catch { return {} } })
 const selectedMonth = ref(availableMonths[0].value)
 const subordinates = computed(() => getSubordinates(currentUser.value.id))
+const project = computed(() => getProjectById(currentUser.value.projectId))
 const selectedEmployee = ref(null)
 const showDrawer = ref(false)
 
 const supervisorForm = reactive({ commitmentRatings: {}, notes: '' })
 const isSaved = ref(false)
+
+// Filter pills
+const activeFilter = ref('all')
+const filters = computed(() => {
+  const all = subordinates.value.length
+  const rated = subordinates.value.filter(s => getMonthlyEval(s.id, selectedMonth.value)?.supervisor).length
+  const pending = all - rated
+  return [
+    { id: 'all', label: 'All', count: all },
+    { id: 'rated', label: 'Rated', count: rated },
+    { id: 'pending', label: 'Pending', count: pending },
+  ]
+})
+
+const filteredSubs = computed(() => {
+  if (activeFilter.value === 'all') return subordinates.value
+  return subordinates.value.filter(s => {
+    const ev = getMonthlyEval(s.id, selectedMonth.value)
+    const isRated = !!ev?.supervisor
+    return activeFilter.value === 'rated' ? isRated : !isRated
+  })
+})
 
 function selectEmployee(emp) {
   selectedEmployee.value = emp
@@ -44,72 +67,129 @@ function ratingBg(v) {
   if (v >= 1) return 'bg-red-50 border-red-300 text-red-700 ring-red-300'
   return 'bg-gray-50 border-gray-200 text-gray-400'
 }
+
+function getEvalInfo(sub) {
+  const ev = getMonthlyEval(sub.id, selectedMonth.value)
+  const commitScore = ev ? getCommitmentScore(ev.self?.commitmentRatings || {}) : 0
+  const contribPts = ev ? getContributionPoints(ev.self?.contributions || []) : 0
+  return { ev, commitScore, contribPts, status: ev?.status || 'not-started', rated: !!ev?.supervisor }
+}
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto animate-fade-in">
-    <div class="flex items-center justify-between mb-5">
-      <div>
-        <h1 class="text-lg font-bold text-txt-heading">Rate {{ currentUser.role === 'project-director' ? 'Project Managers' : 'Team' }}</h1>
-        <p class="text-xs text-txt-subtitle">{{ formatMonth(selectedMonth) }} · Click a row to rate</p>
+  <div class="max-w-6xl mx-auto animate-fade-in flex gap-6">
+    <!-- Main content -->
+    <div class="flex-1 min-w-0">
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-lg font-bold text-txt-heading">Rate {{ currentUser.role === 'project-director' ? 'Project Managers' : 'Team' }}</h1>
+          <p class="text-sm text-txt-subtitle mt-0.5">{{ formatMonth(selectedMonth) }} · Click a member to rate</p>
+        </div>
+        <select v-model="selectedMonth" class="select-field w-40">
+          <option v-for="m in availableMonths" :key="m.value" :value="m.value">{{ m.label }}</option>
+        </select>
       </div>
-      <select v-model="selectedMonth" class="select-field w-40">
-        <option v-for="m in availableMonths" :key="m.value" :value="m.value">{{ m.label }}</option>
-      </select>
+
+      <!-- Filter pills (Skool style) -->
+      <div class="flex items-center gap-2 mb-5">
+        <button
+          v-for="f in filters" :key="f.id"
+          @click="activeFilter = f.id"
+          :class="['filter-pill', { active: activeFilter === f.id }]"
+        >{{ f.label }} <span class="font-bold ml-0.5">{{ f.count }}</span></button>
+      </div>
+
+      <!-- Member list cards (Skool Members style) -->
+      <div class="card overflow-hidden">
+        <div v-for="(sub, i) in filteredSubs" :key="sub.id"
+          @click="selectEmployee(sub)"
+          class="flex items-start gap-4 p-5 hover:bg-surface-gray/40 transition-colors cursor-pointer"
+          :class="i < filteredSubs.length - 1 ? 'border-b border-line/50' : ''"
+        >
+          <!-- Avatar -->
+          <div class="relative shrink-0">
+            <div :class="[sub.avatarColor || 'bg-brand-primary', 'w-12 h-12 rounded-full text-white text-sm font-bold flex items-center justify-center']">{{ sub.initials }}</div>
+            <div v-if="getEvalInfo(sub).rated" class="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-green-500 text-white rounded-full flex items-center justify-center text-[9px] font-bold ring-2 ring-white">✓</div>
+          </div>
+
+          <!-- Info -->
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <h4 class="text-[15px] font-bold text-txt-heading">{{ sub.name }}</h4>
+              <span class="tag text-[10px]" :class="getEvalStatusInfo(getEvalInfo(sub).status).cls">{{ getEvalStatusInfo(getEvalInfo(sub).status).label }}</span>
+            </div>
+            <p class="text-sm text-txt-muted mt-0.5">{{ sub.label }} · {{ sub.id }}</p>
+            <div class="flex items-center gap-4 mt-2 text-xs text-txt-subtitle">
+              <span>Self Score: <strong class="text-brand-primary">{{ getEvalInfo(sub).commitScore }}/50</strong></span>
+              <span>Contrib: <strong class="text-txt-heading">{{ getEvalInfo(sub).contribPts }} pts</strong></span>
+            </div>
+          </div>
+
+          <!-- Action -->
+          <div class="shrink-0 pt-1">
+            <button v-if="getEvalInfo(sub).rated"
+              class="tag tag-success text-xs px-3 py-1.5"
+            >✓ Rated</button>
+            <button v-else
+              class="btn-primary text-xs py-1.5 px-4"
+              :disabled="getEvalInfo(sub).status === 'not-started'"
+              :class="{ 'opacity-40': getEvalInfo(sub).status === 'not-started' }"
+            >Rate</button>
+          </div>
+        </div>
+
+        <div v-if="filteredSubs.length === 0" class="py-12 text-center text-sm text-txt-muted">
+          No team members match this filter
+        </div>
+      </div>
     </div>
 
-    <div class="card overflow-hidden">
-      <table class="w-full">
-        <thead>
-          <tr class="border-b border-line text-left">
-            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider">Employee</th>
-            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider">Role</th>
-            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider text-center">Self Score</th>
-            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider text-center">Eval Status</th>
-            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider text-center">Your Rating</th>
-            <th class="px-6 py-2.5 text-[11px] font-semibold text-txt-muted uppercase tracking-wider text-right">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="sub in subordinates" :key="sub.id" class="border-b border-line/50 last:border-b-0 hover:bg-surface-gray/50 transition-colors cursor-pointer" @click="selectEmployee(sub)">
-            <td class="px-5 py-3">
-              <div class="flex items-center gap-3">
-                <div :class="[sub.avatarColor || 'bg-brand-primary', 'w-8 h-8 rounded-full text-white text-[10px] font-bold flex items-center justify-center']">{{ sub.initials }}</div>
-                <div><p class="text-sm font-semibold text-txt-body">{{ sub.name }}</p><p class="text-[11px] text-txt-disabled">{{ sub.id }}</p></div>
-              </div>
-            </td>
-            <td class="px-5 py-3 text-sm text-txt-subtitle">{{ sub.label }}</td>
-            <td class="px-5 py-3 text-center">
-              <span class="text-sm font-bold text-brand-primary">{{ getMonthlyEval(sub.id, selectedMonth) ? getCommitmentScore(getMonthlyEval(sub.id, selectedMonth).self?.commitmentRatings || {}) : 0 }}/50</span>
-            </td>
-            <td class="px-5 py-3 text-center">
-              <span class="tag text-[10px]" :class="getEvalStatusInfo(getMonthlyEval(sub.id, selectedMonth)?.status || 'not-started').cls">{{ getEvalStatusInfo(getMonthlyEval(sub.id, selectedMonth)?.status || 'not-started').label }}</span>
-            </td>
-            <td class="px-5 py-3 text-center">
-              <span v-if="getMonthlyEval(sub.id, selectedMonth)?.supervisor" class="tag tag-success text-[10px]">✓ Done</span>
-              <span v-else class="tag bg-surface-gray text-txt-disabled text-[10px]">Pending</span>
-            </td>
-            <td class="px-5 py-3 text-right">
-              <button class="btn-primary text-xs py-1.5 px-3" :disabled="!getMonthlyEval(sub.id, selectedMonth) || getMonthlyEval(sub.id, selectedMonth)?.status === 'not-started'" :class="{ 'opacity-40': !getMonthlyEval(sub.id, selectedMonth) || getMonthlyEval(sub.id, selectedMonth)?.status === 'not-started' }">Rate</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <!-- Right sidebar (Skool style) -->
+    <aside class="w-72 shrink-0 hidden lg:block">
+      <div class="card overflow-hidden sticky top-6">
+        <div class="h-24 bg-gradient-to-br from-brand-primary to-blue-400"></div>
+        <div class="p-5">
+          <h3 class="text-[15px] font-bold text-txt-heading">{{ project?.name || 'Rating Overview' }}</h3>
+          <p class="text-xs text-txt-muted mt-0.5">{{ project?.location }} · {{ formatMonth(selectedMonth) }}</p>
+
+          <div class="flex items-center justify-center mt-4 pt-4 border-t border-line">
+            <div class="stat-block">
+              <p class="stat-value text-base">{{ subordinates.length }}</p>
+              <p class="stat-label">Team</p>
+            </div>
+            <div class="stat-block">
+              <p class="stat-value text-base text-brand-primary">{{ subordinates.filter(s => getMonthlyEval(s.id, selectedMonth)?.supervisor).length }}</p>
+              <p class="stat-label">Rated</p>
+            </div>
+            <div class="stat-block">
+              <p class="stat-value text-base text-txt-warn">{{ subordinates.length - subordinates.filter(s => getMonthlyEval(s.id, selectedMonth)?.supervisor).length }}</p>
+              <p class="stat-label">Pending</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1 mt-4">
+            <div v-for="sub in subordinates.slice(0, 5)" :key="sub.id"
+              :class="[sub.avatarColor || 'bg-brand-primary', 'w-7 h-7 rounded-full text-white text-[9px] font-bold flex items-center justify-center ring-2 ring-white -ml-1 first:ml-0']"
+              :title="sub.name"
+            >{{ sub.initials }}</div>
+          </div>
+        </div>
+      </div>
+    </aside>
 
     <!-- Rating Drawer -->
     <teleport to="body">
       <div v-if="showDrawer && selectedEmployee" class="fixed inset-0 z-50 flex items-stretch justify-end">
         <div class="absolute inset-0 bg-black/30 backdrop-blur-sm" @click="closeDrawer"></div>
         <div class="relative z-10 w-full max-w-2xl bg-surface-white shadow-xl overflow-y-auto animate-slide-right">
-          <div class="p-5 space-y-5">
+          <div class="p-6 space-y-5">
             <!-- Header -->
             <div class="flex items-start justify-between">
               <div class="flex items-center gap-3">
-                <div :class="[selectedEmployee.avatarColor || 'bg-brand-primary', 'w-10 h-10 rounded-full text-white text-sm font-bold flex items-center justify-center']">{{ selectedEmployee.initials }}</div>
+                <div :class="[selectedEmployee.avatarColor || 'bg-brand-primary', 'w-11 h-11 rounded-full text-white text-sm font-bold flex items-center justify-center']">{{ selectedEmployee.initials }}</div>
                 <div>
-                  <h3 class="text-sm font-bold text-txt-heading">{{ selectedEmployee.name }}</h3>
-                  <p class="text-xs text-txt-disabled">{{ selectedEmployee.label }} · {{ selectedEmployee.id }} · {{ formatMonth(selectedMonth) }}</p>
+                  <h3 class="text-[15px] font-bold text-txt-heading">{{ selectedEmployee.name }}</h3>
+                  <p class="text-xs text-txt-muted">{{ selectedEmployee.label }} · {{ selectedEmployee.id }} · {{ formatMonth(selectedMonth) }}</p>
                 </div>
               </div>
               <button @click="closeDrawer" class="btn-ghost p-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button>
@@ -122,19 +202,16 @@ function ratingBg(v) {
                 <div v-for="kpi in getKPIsForRole(selectedEmployee.role)" :key="kpi.id" class="p-4 rounded-container border border-line">
                   <p class="text-sm font-semibold text-txt-body mb-1">{{ kpi.label }}</p>
                   <p class="text-xs text-txt-subtitle mb-3">{{ kpi.description }}</p>
-                  <!-- Dual row -->
                   <div class="grid grid-cols-2 gap-3">
-                    <!-- Self -->
                     <div>
                       <p class="text-[10px] font-semibold text-txt-muted uppercase mb-1.5">Self Rating</p>
                       <div class="flex gap-1">
                         <span v-for="r in commitmentRatingScale" :key="r.value"
                           class="flex-1 py-1.5 text-center rounded-btn text-[11px] font-bold border"
-                          :class="(getMonthlyEval(selectedEmployee.id, selectedMonth)?.self?.commitmentRatings?.[kpi.id] || 0) === r.value ? ratingBg(r.value) : 'bg-white border-line/50 text-txt-disabled'"
+                          :class="(getMonthlyEval(selectedEmployee.id, selectedMonth)?.self?.commitmentRatings?.[kpi.id] || 0) === r.value ? ratingBg(r.value) : 'bg-white border-line/50 text-txt-muted'"
                         >{{ r.value }}</span>
                       </div>
                     </div>
-                    <!-- Supervisor -->
                     <div>
                       <p class="text-[10px] font-semibold text-brand-primary uppercase mb-1.5">Your Rating</p>
                       <div class="flex gap-1">
@@ -148,19 +225,16 @@ function ratingBg(v) {
                 </div>
               </div>
 
-              <!-- Self notes -->
               <div v-if="getMonthlyEval(selectedEmployee.id, selectedMonth)?.self?.notes" class="mt-4 p-3 bg-surface-gray rounded-container border border-line/50">
                 <p class="text-[10px] font-semibold text-txt-muted uppercase mb-1">Employee's Notes</p>
                 <p class="text-sm text-txt-body">{{ getMonthlyEval(selectedEmployee.id, selectedMonth).self.notes }}</p>
               </div>
 
-              <!-- Supervisor comment -->
               <div class="mt-4">
                 <label class="text-sm font-medium text-txt-body mb-1.5 block">Your Feedback</label>
                 <textarea v-model="supervisorForm.notes" :disabled="isSaved" rows="3" class="input-field text-sm resize-none" placeholder="Provide specific feedback…"></textarea>
               </div>
 
-              <!-- Actions -->
               <div class="flex gap-2 mt-5">
                 <button v-if="!isSaved" @click="saveRating" class="btn-primary flex-1">Submit Rating</button>
                 <div v-else class="flex-1 text-center py-2.5 bg-surface-success rounded-btn border border-green-200"><p class="text-sm font-bold text-txt-success">✓ Rating Submitted</p></div>
@@ -168,9 +242,8 @@ function ratingBg(v) {
               </div>
             </div>
 
-            <!-- No eval yet -->
             <div v-else class="text-center py-12">
-              <p class="text-sm text-txt-disabled">This employee has not started their evaluation for {{ formatMonth(selectedMonth) }}.</p>
+              <p class="text-sm text-txt-muted">This employee has not started their evaluation for {{ formatMonth(selectedMonth) }}.</p>
             </div>
           </div>
         </div>
