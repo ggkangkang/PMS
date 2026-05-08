@@ -27,6 +27,7 @@ const navItems = computed(() => {
   if (role === 'admin') {
     return [
       { label: 'Admin Panel', path: '/admin', icon: 'admin' },
+      { label: 'Leaderboard', path: '/leaderboard', icon: 'leaderboard' },
       { label: 'Changelog', path: '/changelog', icon: 'changelog' },
     ]
   }
@@ -35,6 +36,7 @@ const navItems = computed(() => {
       { label: 'Department', path: '/hod-dashboard', icon: 'department' },
       { label: 'All Projects', path: '/projects', icon: 'projects' },
       { label: 'Rate PMs', path: '/rate-team', icon: 'rate' },
+      { label: 'Leaderboard', path: '/leaderboard', icon: 'leaderboard' },
       { label: 'My Evaluation', path: '/evaluation', icon: 'evaluation' },
       { label: 'Changelog', path: '/changelog', icon: 'changelog' },
     ]
@@ -43,6 +45,7 @@ const navItems = computed(() => {
     return [
       { label: 'Team Overview', path: '/dashboard', icon: 'dashboard' },
       { label: 'Rate Team', path: '/rate-team', icon: 'rate' },
+      { label: 'Leaderboard', path: '/leaderboard', icon: 'leaderboard' },
       { label: 'My Evaluation', path: '/evaluation', icon: 'evaluation' },
       { label: 'Changelog', path: '/changelog', icon: 'changelog' },
     ]
@@ -51,6 +54,7 @@ const navItems = computed(() => {
   return [
     { label: 'My Dashboard', path: '/dashboard', icon: 'dashboard' },
     { label: 'Monthly Evaluation', path: '/evaluation', icon: 'evaluation' },
+    { label: 'Leaderboard', path: '/leaderboard', icon: 'leaderboard' },
     { label: 'Changelog', path: '/changelog', icon: 'changelog' },
   ]
 })
