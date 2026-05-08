@@ -133,7 +133,7 @@ function gradeColor(g) {
     <div class="flex items-center justify-between mb-6">
       <div>
         <h1 class="text-lg font-bold text-txt-heading">Department Overview</h1>
-        <p class="text-sm text-txt-subtitle mt-0.5">{{ formatMonth(selectedMonth) }} · Construction Department</p>
+        <p class="text-sm text-txt-subtitle mt-0.5">{{ formatMonth(selectedMonth) }} · Project Site Department</p>
       </div>
       <select v-model="selectedMonth" class="select-field w-40">
         <option v-for="m in availableMonths" :key="m.value" :value="m.value">{{ m.label }}</option>

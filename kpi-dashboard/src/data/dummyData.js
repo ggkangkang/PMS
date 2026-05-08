@@ -11,21 +11,21 @@ export const users = [
   { id: 'ADMIN', name: 'System Admin', initials: 'SA', role: 'admin', label: 'System Administrator', reportsTo: null, avatarColor: 'bg-gray-800', ic: '000000-00-0000', dateOfJoin: '2010-01-01', department: 'IT' },
 
   // Project Director / HOD (oversees all projects & department)
-  { id: 'PD001', name: 'Dato Ahmad Razak', initials: 'DA', role: 'project-director', label: 'Project Director / HOD', projects: ['PRJ001','PRJ002','PRJ003'], reportsTo: null, avatarColor: 'bg-brand-primary', ic: '650415-10-5533', dateOfJoin: '2010-03-01', department: 'Construction' },
+  { id: 'PD001', name: 'Dato Ahmad Razak', initials: 'DA', role: 'project-director', label: 'Project Director / HOD', projects: ['PRJ001','PRJ002','PRJ003'], reportsTo: null, avatarColor: 'bg-brand-primary', ic: '650415-10-5533', dateOfJoin: '2010-03-01', department: 'Project Site' },
 
   // Project Managers
-  { id: 'PM001', name: 'James Tan', initials: 'JT', role: 'project-manager', label: 'Project Manager', projectId: 'PRJ001', reportsTo: 'PD001', avatarColor: 'bg-indigo-500', ic: '850722-14-5201', dateOfJoin: '2018-06-15', department: 'Construction' },
-  { id: 'PM002', name: 'Sarah Lee', initials: 'SL', role: 'project-manager', label: 'Project Manager', projectId: 'PRJ002', reportsTo: 'PD001', avatarColor: 'bg-pink-500', ic: '880930-10-6644', dateOfJoin: '2019-01-10', department: 'Construction' },
+  { id: 'PM001', name: 'James Tan', initials: 'JT', role: 'project-manager', label: 'Project Manager', projectId: 'PRJ001', reportsTo: 'PD001', avatarColor: 'bg-indigo-500', ic: '850722-14-5201', dateOfJoin: '2018-06-15', department: 'Project Site' },
+  { id: 'PM002', name: 'Sarah Lee', initials: 'SL', role: 'project-manager', label: 'Project Manager', projectId: 'PRJ002', reportsTo: 'PD001', avatarColor: 'bg-pink-500', ic: '880930-10-6644', dateOfJoin: '2019-01-10', department: 'Project Site' },
 
   // Staff — Forum 2 (PRJ001)
-  { id: 'EMP001', name: 'Ahmad Razak', initials: 'AR', role: 'site-supervisor', label: 'Site Supervisor', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-orange-500', ic: '900115-08-4321', dateOfJoin: '2020-02-01', department: 'Construction' },
-  { id: 'EMP002', name: 'Raju Krishnan', initials: 'RK', role: 'site-engineer', label: 'Site Engineer', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-green-600', ic: '910308-01-7788', dateOfJoin: '2021-04-12', department: 'Construction' },
-  { id: 'EMP003', name: 'Mohd Hafiz', initials: 'MH', role: 'site-admin', label: 'Site Admin', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-cyan-600', ic: '950620-14-3322', dateOfJoin: '2022-08-20', department: 'Construction' },
+  { id: 'EMP001', name: 'Ahmad Razak', initials: 'AR', role: 'site-supervisor', label: 'Site Supervisor', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-orange-500', ic: '900115-08-4321', dateOfJoin: '2020-02-01', department: 'Project Site' },
+  { id: 'EMP002', name: 'Raju Krishnan', initials: 'RK', role: 'site-engineer', label: 'Site Engineer', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-green-600', ic: '910308-01-7788', dateOfJoin: '2021-04-12', department: 'Project Site' },
+  { id: 'EMP003', name: 'Mohd Hafiz', initials: 'MH', role: 'site-admin', label: 'Site Admin', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-cyan-600', ic: '950620-14-3322', dateOfJoin: '2022-08-20', department: 'Project Site' },
 
   // Staff — AR496 (PRJ002)
-  { id: 'EMP004', name: 'Lee Wei Ming', initials: 'LW', role: 'quantity-surveyor', label: 'Quantity Surveyor', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-emerald-600', ic: '920812-10-5566', dateOfJoin: '2020-11-03', department: 'Construction' },
-  { id: 'EMP005', name: 'Siti Nurhaliza', initials: 'SN', role: 'site-supervisor', label: 'Site Supervisor', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-violet-500', ic: '930425-06-8899', dateOfJoin: '2021-07-18', department: 'Construction' },
-  { id: 'EMP006', name: 'Daniel Tan', initials: 'DT', role: 'site-engineer', label: 'Site Engineer', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-teal-600', ic: '940117-10-2233', dateOfJoin: '2023-01-09', department: 'Construction' },
+  { id: 'EMP004', name: 'Lee Wei Ming', initials: 'LW', role: 'quantity-surveyor', label: 'Quantity Surveyor', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-emerald-600', ic: '920812-10-5566', dateOfJoin: '2020-11-03', department: 'Project Site' },
+  { id: 'EMP005', name: 'Siti Nurhaliza', initials: 'SN', role: 'site-supervisor', label: 'Site Supervisor', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-violet-500', ic: '930425-06-8899', dateOfJoin: '2021-07-18', department: 'Project Site' },
+  { id: 'EMP006', name: 'Daniel Tan', initials: 'DT', role: 'site-engineer', label: 'Site Engineer', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-teal-600', ic: '940117-10-2233', dateOfJoin: '2023-01-09', department: 'Project Site' },
 ]
 
 // ─── Role-Specific KPIs (50% — 5 KPIs at 10% each) ──────────────────
