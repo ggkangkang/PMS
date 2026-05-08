@@ -18,7 +18,8 @@ async function handleLogin() {
   if (user) {
     localStorage.setItem('currentUser', JSON.stringify(user))
     const role = user.role
-    if (role === 'project-director') router.push('/projects')
+    if (role === 'admin') router.push('/admin')
+    else if (role === 'project-director') router.push('/hod-dashboard')
     else if (role === 'project-manager') router.push('/dashboard')
     else router.push('/dashboard')
   } else {
@@ -78,8 +79,10 @@ async function handleLogin() {
 
         <!-- Footer -->
         <p class="text-center text-[13px] text-txt-subtitle mt-6">
-          Demo? Try <span class="text-[#4285f4] font-semibold cursor-pointer hover:underline" @click="staffId = 'PM001'">PM001</span>
-          or <span class="text-[#4285f4] font-semibold cursor-pointer hover:underline" @click="staffId = 'PD001'">PD001</span>
+          Demo? Try <span class="text-[#4285f4] font-semibold cursor-pointer hover:underline" @click="staffId = 'PD001'">PD001</span>,
+          <span class="text-[#4285f4] font-semibold cursor-pointer hover:underline" @click="staffId = 'PM001'">PM001</span>,
+          <span class="text-[#4285f4] font-semibold cursor-pointer hover:underline" @click="staffId = 'EMP001'">EMP001</span>
+          or <span class="text-[#4285f4] font-semibold cursor-pointer hover:underline" @click="staffId = 'ADMIN'">ADMIN</span>
         </p>
       </div>
     </div>

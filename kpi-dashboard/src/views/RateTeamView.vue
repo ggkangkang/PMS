@@ -4,6 +4,7 @@ import {
   getSubordinates, getUserById, getMonthlyEval, getKPIsForRole,
   commitmentRatingScale, availableMonths, formatMonth, getProjectById,
   getCommitmentScore, getContributionPoints, getEvalStatusInfo,
+  behaviourPillars, behaviourRatingScale, getFinalMonthlyScore,
 } from '../data/dummyData'
 
 const currentUser = computed(() => { try { return JSON.parse(localStorage.getItem('currentUser') || '{}') } catch { return {} } })
@@ -13,7 +14,7 @@ const project = computed(() => getProjectById(currentUser.value.projectId))
 const selectedEmployee = ref(null)
 const showDrawer = ref(false)
 
-const supervisorForm = reactive({ commitmentRatings: {}, notes: '' })
+const supervisorForm = reactive({ commitmentRatings: {}, behaviourRatings: {}, notes: '' })
 const isSaved = ref(false)
 
 // Filter pills
@@ -45,12 +46,15 @@ function selectEmployee(emp) {
   const ev = getMonthlyEval(emp.id, selectedMonth.value)
   if (ev?.supervisor) {
     supervisorForm.commitmentRatings = { ...ev.supervisor.commitmentRatings }
+    supervisorForm.behaviourRatings = { ...(ev.supervisor.behaviourRatings || {}) }
     supervisorForm.notes = ev.supervisor.notes || ''
     isSaved.value = true
   } else {
     const kpis = getKPIsForRole(emp.role)
     const empty = {}; kpis.forEach(k => empty[k.id] = 0)
     supervisorForm.commitmentRatings = empty
+    const bEmpty = {}; behaviourPillars.forEach(p => bEmpty[p.id] = 0)
+    supervisorForm.behaviourRatings = bEmpty
     supervisorForm.notes = ''
   }
 }
@@ -230,14 +234,35 @@ function getEvalInfo(sub) {
                 <p class="text-sm text-txt-body">{{ getMonthlyEval(selectedEmployee.id, selectedMonth).self.notes }}</p>
               </div>
 
+              <!-- Behaviour 20% Rating (4 Pillars) -->
+              <h4 class="text-[11px] font-semibold text-brand-primary uppercase tracking-wider mt-5 mb-3">Behaviour Rating (20%) · 4 Pillars</h4>
+              <div class="space-y-3">
+                <div v-for="pillar in behaviourPillars" :key="pillar.id" class="p-4 rounded-container border border-line">
+                  <div class="flex items-start justify-between gap-3 mb-3">
+                    <div>
+                      <p class="text-sm font-semibold text-txt-body">{{ pillar.label }}</p>
+                      <p class="text-[10px] text-txt-muted">{{ pillar.subtitle }}</p>
+                      <p class="text-xs text-txt-subtitle mt-1">{{ pillar.description }}</p>
+                    </div>
+                    <span v-if="supervisorForm.behaviourRatings[pillar.id]" class="tag border text-[10px] shrink-0" :class="ratingBg(supervisorForm.behaviourRatings[pillar.id])">{{ supervisorForm.behaviourRatings[pillar.id] }}/5</span>
+                  </div>
+                  <div class="flex gap-1.5">
+                    <button v-for="r in behaviourRatingScale" :key="r.value" @click="supervisorForm.behaviourRatings[pillar.id] = r.value" :disabled="isSaved"
+                      class="flex-1 py-2 px-1 rounded-btn text-[11px] font-medium border transition-all"
+                      :class="supervisorForm.behaviourRatings[pillar.id] === r.value ? ratingBg(r.value) + ' ring-1 ring-offset-1 shadow-xs' : 'bg-white border-line text-txt-subtitle hover:bg-surface-gray'"
+                    ><span class="block font-bold text-sm">{{ r.value }}</span><span class="hidden sm:block mt-0.5 leading-tight">{{ r.label }}</span></button>
+                  </div>
+                </div>
+              </div>
+
               <div class="mt-4">
                 <label class="text-sm font-medium text-txt-body mb-1.5 block">Your Feedback</label>
                 <textarea v-model="supervisorForm.notes" :disabled="isSaved" rows="3" class="input-field text-sm resize-none" placeholder="Provide specific feedback…"></textarea>
               </div>
 
               <div class="flex gap-2 mt-5">
-                <button v-if="!isSaved" @click="saveRating" class="btn-primary flex-1">Submit Rating</button>
-                <div v-else class="flex-1 text-center py-2.5 bg-surface-success rounded-btn border border-green-200"><p class="text-sm font-bold text-txt-success">✓ Rating Submitted</p></div>
+                <button v-if="!isSaved" @click="saveRating" class="btn-primary flex-1">Submit & Lock</button>
+                <div v-else class="flex-1 text-center py-2.5 bg-surface-success rounded-btn border border-green-200"><p class="text-sm font-bold text-txt-success">✓ Rating Submitted & Locked</p></div>
                 <button @click="closeDrawer" class="btn-secondary flex-1">Close</button>
               </div>
             </div>

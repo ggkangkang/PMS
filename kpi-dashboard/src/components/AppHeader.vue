@@ -16,6 +16,7 @@ const projectName = computed(() => {
 
 const roleLabel = computed(() => {
   const r = userRole.value
+  if (r === 'admin') return 'System Admin'
   if (r === 'project-director') return 'Project Director'
   if (r === 'project-manager') return 'Project Manager'
   return 'Staff'
@@ -23,8 +24,15 @@ const roleLabel = computed(() => {
 
 const navItems = computed(() => {
   const role = userRole.value
+  if (role === 'admin') {
+    return [
+      { label: 'Admin Panel', path: '/admin', icon: 'admin' },
+      { label: 'Changelog', path: '/changelog', icon: 'changelog' },
+    ]
+  }
   if (role === 'project-director') {
     return [
+      { label: 'Department', path: '/hod-dashboard', icon: 'department' },
       { label: 'All Projects', path: '/projects', icon: 'projects' },
       { label: 'Rate PMs', path: '/rate-team', icon: 'rate' },
       { label: 'My Evaluation', path: '/evaluation', icon: 'evaluation' },

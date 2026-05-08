@@ -7,22 +7,25 @@ export const projects = [
 
 // ─── Users ────────────────────────────────────────────────────────────
 export const users = [
-  // Project Director (oversees all projects)
-  { id: 'PD001', name: 'Dato Ahmad Razak', initials: 'DA', role: 'project-director', label: 'Project Director', projects: ['PRJ001','PRJ002','PRJ003'], reportsTo: null, avatarColor: 'bg-brand-primary' },
+  // System Admin
+  { id: 'ADMIN', name: 'System Admin', initials: 'SA', role: 'admin', label: 'System Administrator', reportsTo: null, avatarColor: 'bg-gray-800', ic: '000000-00-0000', dateOfJoin: '2010-01-01', department: 'IT' },
+
+  // Project Director / HOD (oversees all projects & department)
+  { id: 'PD001', name: 'Dato Ahmad Razak', initials: 'DA', role: 'project-director', label: 'Project Director / HOD', projects: ['PRJ001','PRJ002','PRJ003'], reportsTo: null, avatarColor: 'bg-brand-primary', ic: '650415-10-5533', dateOfJoin: '2010-03-01', department: 'Construction' },
 
   // Project Managers
-  { id: 'PM001', name: 'James Tan', initials: 'JT', role: 'project-manager', label: 'Project Manager', projectId: 'PRJ001', reportsTo: 'PD001', avatarColor: 'bg-indigo-500' },
-  { id: 'PM002', name: 'Sarah Lee', initials: 'SL', role: 'project-manager', label: 'Project Manager', projectId: 'PRJ002', reportsTo: 'PD001', avatarColor: 'bg-pink-500' },
+  { id: 'PM001', name: 'James Tan', initials: 'JT', role: 'project-manager', label: 'Project Manager', projectId: 'PRJ001', reportsTo: 'PD001', avatarColor: 'bg-indigo-500', ic: '850722-14-5201', dateOfJoin: '2018-06-15', department: 'Construction' },
+  { id: 'PM002', name: 'Sarah Lee', initials: 'SL', role: 'project-manager', label: 'Project Manager', projectId: 'PRJ002', reportsTo: 'PD001', avatarColor: 'bg-pink-500', ic: '880930-10-6644', dateOfJoin: '2019-01-10', department: 'Construction' },
 
   // Staff — Forum 2 (PRJ001)
-  { id: 'EMP001', name: 'Ahmad Razak', initials: 'AR', role: 'site-supervisor', label: 'Site Supervisor', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-orange-500' },
-  { id: 'EMP002', name: 'Raju Krishnan', initials: 'RK', role: 'site-engineer', label: 'Site Engineer', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-green-600' },
-  { id: 'EMP003', name: 'Mohd Hafiz', initials: 'MH', role: 'site-admin', label: 'Site Admin', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-cyan-600' },
+  { id: 'EMP001', name: 'Ahmad Razak', initials: 'AR', role: 'site-supervisor', label: 'Site Supervisor', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-orange-500', ic: '900115-08-4321', dateOfJoin: '2020-02-01', department: 'Construction' },
+  { id: 'EMP002', name: 'Raju Krishnan', initials: 'RK', role: 'site-engineer', label: 'Site Engineer', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-green-600', ic: '910308-01-7788', dateOfJoin: '2021-04-12', department: 'Construction' },
+  { id: 'EMP003', name: 'Mohd Hafiz', initials: 'MH', role: 'site-admin', label: 'Site Admin', projectId: 'PRJ001', reportsTo: 'PM001', avatarColor: 'bg-cyan-600', ic: '950620-14-3322', dateOfJoin: '2022-08-20', department: 'Construction' },
 
   // Staff — AR496 (PRJ002)
-  { id: 'EMP004', name: 'Lee Wei Ming', initials: 'LW', role: 'quantity-surveyor', label: 'Quantity Surveyor', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-emerald-600' },
-  { id: 'EMP005', name: 'Siti Nurhaliza', initials: 'SN', role: 'site-supervisor', label: 'Site Supervisor', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-violet-500' },
-  { id: 'EMP006', name: 'Daniel Tan', initials: 'DT', role: 'site-engineer', label: 'Site Engineer', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-teal-600' },
+  { id: 'EMP004', name: 'Lee Wei Ming', initials: 'LW', role: 'quantity-surveyor', label: 'Quantity Surveyor', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-emerald-600', ic: '920812-10-5566', dateOfJoin: '2020-11-03', department: 'Construction' },
+  { id: 'EMP005', name: 'Siti Nurhaliza', initials: 'SN', role: 'site-supervisor', label: 'Site Supervisor', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-violet-500', ic: '930425-06-8899', dateOfJoin: '2021-07-18', department: 'Construction' },
+  { id: 'EMP006', name: 'Daniel Tan', initials: 'DT', role: 'site-engineer', label: 'Site Engineer', projectId: 'PRJ002', reportsTo: 'PM002', avatarColor: 'bg-teal-600', ic: '940117-10-2233', dateOfJoin: '2023-01-09', department: 'Construction' },
 ]
 
 // ─── Role-Specific KPIs (50% — 5 KPIs at 10% each) ──────────────────
@@ -73,21 +76,25 @@ export const commitmentRatingScale = [
   { value: 5, label: 'Outstanding', description: 'Exceptional performance', color: 'emerge' },
 ]
 
-export const characterTraits = [
-  { id: 'teamwork', label: 'Teamwork & Collaboration', description: 'Works effectively with colleagues, shares knowledge, supports team goals.' },
-  { id: 'communication', label: 'Communication Skills', description: 'Communicates clearly and professionally. Actively listens and provides constructive feedback.' },
-  { id: 'initiative', label: 'Initiative & Proactiveness', description: 'Takes ownership, anticipates problems, proposes solutions without being prompted.' },
-  { id: 'integrity', label: 'Integrity & Ethics', description: 'Demonstrates honesty, accountability, and adherence to company policies.' },
-  { id: 'adaptability', label: 'Adaptability & Learning', description: 'Embraces change, learns new skills, adjusts to evolving demands.' },
+// ─── 4 Behaviour Pillars (20% — rated by supervisor) ─────────────────
+export const behaviourPillars = [
+  { id: 'accountability', label: 'Accountability', subtitle: 'Responsible', description: 'Takes ownership of tasks, delivers on promises, accepts responsibility for outcomes and mistakes.' },
+  { id: 'sustainability', label: 'Sustainability', subtitle: 'Communication', description: 'Communicates clearly and consistently. Builds lasting professional relationships and maintains open dialogue.' },
+  { id: 'adaptability', label: 'Adaptability', subtitle: 'Teamwork', description: 'Works effectively with others, embraces change, and adjusts approach to meet evolving team and project needs.' },
+  { id: 'synergy', label: 'Synergy', subtitle: 'Problem-solving & Leadership', description: 'Drives collaborative problem-solving, demonstrates leadership qualities, and multiplies team effectiveness.' },
 ]
 
-export const characterRatingScale = [
-  { value: 1, label: 'Rarely Demonstrated', color: 'danger' },
-  { value: 2, label: 'Sometimes Demonstrated', color: 'coral' },
-  { value: 3, label: 'Often Demonstrated', color: 'caution' },
-  { value: 4, label: 'Consistently Demonstrated', color: 'ocean' },
-  { value: 5, label: 'Exemplary', color: 'emerge' },
+export const behaviourRatingScale = [
+  { value: 1, label: 'Unsatisfactory', color: 'danger' },
+  { value: 2, label: 'Needs Improvement', color: 'coral' },
+  { value: 3, label: 'Meets Expectations', color: 'caution' },
+  { value: 4, label: 'Exceeds Expectations', color: 'ocean' },
+  { value: 5, label: 'Outstanding', color: 'emerge' },
 ]
+
+// Legacy — kept for backward compat with quarterly character view
+export const characterTraits = behaviourPillars
+export const characterRatingScale = behaviourRatingScale
 
 // ─── Contributions (30%) ──────────────────────────────────────────────
 export const contributionOptions = [
@@ -124,9 +131,11 @@ export const monthlyEvaluations = {
     },
     supervisor: {
       commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 4, kpi4: 4, kpi5: 3 },
+      behaviourRatings: { accountability: 4, sustainability: 3, adaptability: 4, synergy: 3 },
       notes: 'Ahmad has shown strong safety leadership. Needs to improve daily progress reporting detail.',
       ratedBy: 'PM001', ratedAt: '2026-05-03',
     },
+    lockedAt: '2026-05-03',
   },
   'EMP001-2026-03': {
     employeeId: 'EMP001', month: '2026-03', projectId: 'PRJ001', status: 'reviewed',
@@ -137,9 +146,11 @@ export const monthlyEvaluations = {
     },
     supervisor: {
       commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 2 },
+      behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 2 },
       notes: 'Consistent but could push harder on housekeeping standards.',
       ratedBy: 'PM001', ratedAt: '2026-04-05',
     },
+    lockedAt: '2026-04-05',
   },
   // EMP002 — Raju Krishnan (Site Engineer, Forum 2) — April
   'EMP002-2026-04': {
@@ -176,9 +187,11 @@ export const monthlyEvaluations = {
     },
     supervisor: {
       commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 5, kpi4: 4, kpi5: 3 },
+      behaviourRatings: { accountability: 4, sustainability: 4, adaptability: 4, synergy: 5 },
       notes: 'Wei Ming excels at variation management. Strong month.',
       ratedBy: 'PM002', ratedAt: '2026-05-02',
     },
+    lockedAt: '2026-05-02',
   },
   // EMP005 — Siti (Site Supervisor, AR496) — April
   'EMP005-2026-04': {
@@ -221,9 +234,11 @@ export const monthlyEvaluations = {
     },
     supervisor: {
       commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 4, kpi4: 5, kpi5: 4 },
+      behaviourRatings: { accountability: 4, sustainability: 5, adaptability: 4, synergy: 4 },
       notes: 'Sarah managed the team well during a challenging transition period.',
       ratedBy: 'PD001', ratedAt: '2026-05-04',
     },
+    lockedAt: '2026-05-04',
   },
 }
 
@@ -336,6 +351,15 @@ export function getCharacterScore(ratings) {
   return Math.round((avg / 5) * 20)
 }
 
+// Behaviour score (20%) — rated by supervisor using 4 pillars
+export function getBehaviourScore(behaviourRatings) {
+  if (!behaviourRatings) return 0
+  const values = Object.values(behaviourRatings).filter(v => typeof v === 'number' && v > 0)
+  if (values.length === 0) return 0
+  const avg = values.reduce((s, v) => s + v, 0) / values.length
+  return Math.round((avg / 5) * 20)
+}
+
 export function getContributionPoints(contributions) {
   if (!contributions || !Array.isArray(contributions)) return 0
   return contributions.reduce((s, c) => s + c.points, 0)
@@ -344,6 +368,25 @@ export function getContributionPoints(contributions) {
 export function getOverallScore(commitmentRatings, contributions, characterRatings) {
   const contribPts = getContributionPoints(contributions)
   return getCommitmentScore(commitmentRatings) + getContributionScore(contribPts) + getCharacterScore(characterRatings)
+}
+
+// Final monthly score: 50% commitments + 30% contributions + 20% behaviour
+export function getFinalMonthlyScore(userId, month) {
+  const ev = getMonthlyEval(userId, month)
+  if (!ev) return { commitScore: 0, contribScore: 0, behaviourScore: 0, total: 0, grade: getScoreGrade(0), isComplete: false }
+  const commitScore = getCommitmentScore(ev.self?.commitmentRatings || {})
+  const contribPts = getContributionPoints(ev.self?.contributions || [])
+  const contribScore = getContributionScore(contribPts)
+  const behaviourScore = ev.supervisor?.behaviourRatings ? getBehaviourScore(ev.supervisor.behaviourRatings) : 0
+  const isComplete = !!ev.supervisor?.behaviourRatings
+  const total = commitScore + contribScore + behaviourScore
+  const pct = Math.round((total / 100) * 100)
+  return { commitScore, contribScore, behaviourScore, contribPts, total, pct, grade: getScoreGrade(pct), isComplete }
+}
+
+// Get all department staff (everyone except the HOD/PD)
+export function getDepartmentStaff() {
+  return users.filter(u => u.role !== 'project-director')
 }
 
 export function getScoreGrade(score) {

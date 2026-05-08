@@ -5,6 +5,7 @@ import {
   contributionOptions, contributionBaseline, availableMonths, formatMonth,
   getMonthlyEval, getQuarterlyChar, getCurrentQuarter, isQuarterEndMonth,
   getCommitmentScore, getContributionScore, getCharacterScore, getContributionPoints, getScoreGrade,
+  getFinalMonthlyScore, getBehaviourScore, behaviourPillars,
 } from '../data/dummyData'
 import ProgressRing from '../components/ProgressRing.vue'
 
@@ -52,6 +53,8 @@ watch([evalData, charData], () => {
 const contribPts = computed(() => getContributionPoints(form.contributions))
 const commitScore = computed(() => getCommitmentScore(form.commitmentRatings))
 const contribScore = computed(() => getContributionScore(contribPts.value))
+const finalScore = computed(() => getFinalMonthlyScore(currentUser.value.id, selectedMonth.value))
+const behaviourScore = computed(() => getBehaviourScore(currentUser.value.id, selectedMonth.value))
 const charScore = computed(() => getCharacterScore(form.characterRatings))
 const overallScore = computed(() => commitScore.value + contribScore.value + (isQuarterEnd.value ? charScore.value : 0))
 const maxScore = computed(() => isQuarterEnd.value ? 100 : 80)
@@ -257,6 +260,27 @@ const sections = computed(() => {
           <div v-else class="p-3 rounded-container bg-surface-gray border border-line/50 text-sm text-txt-disabled text-center">Character evaluation is done at quarter end (Mar, Jun, Sep, Dec)</div>
         </div>
       </div>
+      <!-- Final Score (after supervisor rates 20% behaviour) -->
+      <div v-if="finalScore.isComplete" class="card p-6 border-2 border-green-200">
+        <h4 class="text-[11px] font-semibold text-txt-success uppercase tracking-wider mb-4">✓ Final Monthly Score — Behaviour Rated</h4>
+        <div class="flex flex-col sm:flex-row items-center gap-6">
+          <ProgressRing :percentage="finalScore.pct" :size="130" :strokeWidth="10" :color="gradeColor(finalScore.grade.color)" bgColor="#e5e7eb" />
+          <div class="text-center sm:text-left">
+            <p class="text-3xl font-bold text-txt-heading">{{ finalScore.total }}<span class="text-sm text-txt-disabled">/100</span></p>
+            <p class="text-sm font-semibold mt-1" :style="{ color: gradeColor(finalScore.grade.color) }">Grade {{ finalScore.grade.grade }} — {{ finalScore.grade.label }}</p>
+          </div>
+        </div>
+        <div class="space-y-3 mt-5">
+          <div><div class="flex justify-between text-sm mb-1"><span class="text-txt-body font-medium">Commitments (50%)</span><span class="font-bold text-txt-heading">{{ finalScore.commitScore }}/50</span></div><div class="h-2.5 bg-surface-gray rounded-full overflow-hidden"><div class="h-full rounded-full bg-brand-primary transition-all duration-500" :style="{ width: (finalScore.commitScore/50*100)+'%' }"></div></div></div>
+          <div><div class="flex justify-between text-sm mb-1"><span class="text-txt-body font-medium">Contributions (30%)</span><span class="font-bold text-txt-heading">{{ finalScore.contribScore }}/30</span></div><div class="h-2.5 bg-surface-gray rounded-full overflow-hidden"><div class="h-full rounded-full bg-yellow-500 transition-all duration-500" :style="{ width: (finalScore.contribScore/30*100)+'%' }"></div></div></div>
+          <div><div class="flex justify-between text-sm mb-1"><span class="text-txt-body font-medium">Behaviour — 4 Pillars (20%)</span><span class="font-bold text-txt-success">{{ finalScore.behaviourScore }}/20</span></div><div class="h-2.5 bg-surface-gray rounded-full overflow-hidden"><div class="h-full rounded-full bg-green-500 transition-all duration-500" :style="{ width: (finalScore.behaviourScore/20*100)+'%' }"></div></div></div>
+        </div>
+      </div>
+      <div v-else-if="evalData" class="card p-4 bg-surface-gray border border-line flex items-center gap-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 256 256" fill="#9ca3af"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm64-88a8,8,0,0,1-8,8H128a8,8,0,0,1-8-8V72a8,8,0,0,1,16,0v48h48A8,8,0,0,1,192,128Z"/></svg>
+        <div><p class="text-sm text-txt-subtitle">Awaiting supervisor to rate 20% behaviour</p><p class="text-xs text-txt-disabled">Final score will appear once your supervisor completes the behaviour rating.</p></div>
+      </div>
+
       <!-- Supervisor feedback (read-only) -->
       <div v-if="evalData?.supervisor" class="card p-6">
         <h4 class="text-[11px] font-semibold text-txt-muted uppercase tracking-wider mb-3">Supervisor Feedback</h4>

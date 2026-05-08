@@ -5,6 +5,8 @@ import EvaluationView from '../views/EvaluationView.vue'
 import RateTeamView from '../views/RateTeamView.vue'
 import ProjectsView from '../views/ProjectsView.vue'
 import ChangelogView from '../views/ChangelogView.vue'
+import HodDashboardView from '../views/HodDashboardView.vue'
+import AdminView from '../views/AdminView.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -13,6 +15,8 @@ const routes = [
   { path: '/evaluation', name: 'Evaluation', component: EvaluationView, meta: { layout: 'app' } },
   { path: '/rate-team', name: 'RateTeam', component: RateTeamView, meta: { layout: 'app' } },
   { path: '/projects', name: 'Projects', component: ProjectsView, meta: { layout: 'app' } },
+  { path: '/hod-dashboard', name: 'HodDashboard', component: HodDashboardView, meta: { layout: 'app' } },
+  { path: '/admin', name: 'Admin', component: AdminView, meta: { layout: 'app' } },
   { path: '/changelog', name: 'Changelog', component: ChangelogView, meta: { layout: 'app' } },
 ]
 

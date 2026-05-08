@@ -1,10 +1,27 @@
 <script setup>
 const versions = [
   {
-    version: '1.2.0',
-    date: '24 Apr 2026',
+    version: '2.0.0',
+    date: '8 May 2026',
     tag: 'Latest',
     tagCls: 'tag-success',
+    changes: [
+      { type: 'feature', text: 'HOD / Department Overview dashboard — view all staff by name, IC, position, score, and date of joining' },
+      { type: 'feature', text: '4 Behaviour Pillars (20%): Accountability, Sustainability, Adaptability, Synergy — rated by supervisor' },
+      { type: 'feature', text: 'Submit & Lock workflow — once supervisor submits, ratings become read-only' },
+      { type: 'feature', text: 'Final Monthly Scoring engine: 50% Commitments + 30% Contributions + 20% Behaviour = 100%' },
+      { type: 'feature', text: 'Staff Final Score view — shows full breakdown once supervisor rates behaviour' },
+      { type: 'feature', text: 'User metadata: IC number and Date of Joining on all user profiles' },
+      { type: 'improvement', text: 'PD/HOD login now routes to Department Overview as primary view' },
+      { type: 'improvement', text: 'PM Rate Team drawer now includes behaviour 4-pillar rating section' },
+      { type: 'improvement', text: 'Login page shows all 3 demo accounts: PD001, PM001, EMP001' },
+    ],
+  },
+  {
+    version: '1.2.0',
+    date: '24 Apr 2026',
+    tag: '',
+    tagCls: '',
     changes: [
       { type: 'feature', text: 'Project-based structure with 3 construction projects (Forum 2, AR496, QS-2024-001)' },
       { type: 'feature', text: '3-tier role hierarchy: Project Director → Project Manager → Staff' },
