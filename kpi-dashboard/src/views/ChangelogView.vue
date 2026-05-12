@@ -1,10 +1,32 @@
 <script setup>
 const versions = [
   {
-    version: '2.0.0',
-    date: '8 May 2026',
+    version: '2.1.0',
+    date: '11 May 2026',
     tag: 'Latest',
     tagCls: 'tag-success',
+    changes: [
+      { type: 'feature', text: 'My Dashboard — unified personal dashboard for all roles with score breakdown, grade, and department rank' },
+      { type: 'feature', text: 'Top 5 Leaderboard widget on My Dashboard with your position highlighted' },
+      { type: 'feature', text: 'Core Commitments tracker — shows all 5 KPIs with On Track / Needs Attention / Not Started status' },
+      { type: 'feature', text: 'Character Pillar rubric — full 5-level descriptors per pillar shown when rating (from official reference)' },
+      { type: 'feature', text: 'Contribution carry-forward — excess points above top tier (350) roll into next month automatically' },
+      { type: 'feature', text: 'Leaderboard Rank By filter — sort by Overall, Commitments (50%), Contributions (30%), or Character (20%)' },
+      { type: 'feature', text: 'PD Department Dashboard — role filter dropdown (PM, Supervisor, Engineer, QS, Admin)' },
+      { type: 'feature', text: 'Contribution visibility in PM Rate Team and HOD drawers — view staff logged contributions and carry-forward' },
+      { type: 'improvement', text: 'Leaderboard score chips now labelled: KPI 40/50 · Contrib 12/30 · Char 17/20' },
+      { type: 'improvement', text: 'Character Pillar names updated: Accountability & Attendance, Sustainability & Communication, Adaptability & Problem Solving, Synergy & Leadership' },
+      { type: 'improvement', text: 'Rating scale updated: Needs Improvement → Developing → Meets Expectations → Exceeds Expectations → Role Model' },
+      { type: 'improvement', text: 'Contribution form stays open after KPI submission — contributions are always additive' },
+      { type: 'improvement', text: 'Rate PMs renamed to Rate Team for consistency across PD and PM views' },
+      { type: 'improvement', text: 'All roles now land on My Dashboard after login' },
+    ],
+  },
+  {
+    version: '2.0.0',
+    date: '8 May 2026',
+    tag: '',
+    tagCls: '',
     changes: [
       { type: 'feature', text: 'HOD / Department Overview dashboard — view all staff by name, IC, position, score, and date of joining' },
       { type: 'feature', text: '4 Behaviour Pillars (20%): Accountability, Sustainability, Adaptability, Synergy — rated by supervisor' },

@@ -8,10 +8,12 @@ import ChangelogView from '../views/ChangelogView.vue'
 import HodDashboardView from '../views/HodDashboardView.vue'
 import AdminView from '../views/AdminView.vue'
 import LeaderboardView from '../views/LeaderboardView.vue'
+import MyDashboardView from '../views/MyDashboardView.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', name: 'Login', component: LoginView, meta: { layout: 'blank' } },
+  { path: '/my-dashboard', name: 'MyDashboard', component: MyDashboardView, meta: { layout: 'app' } },
   { path: '/dashboard', name: 'Dashboard', component: EmployeeView, meta: { layout: 'app' } },
   { path: '/evaluation', name: 'Evaluation', component: EvaluationView, meta: { layout: 'app' } },
   { path: '/rate-team', name: 'RateTeam', component: RateTeamView, meta: { layout: 'app' } },

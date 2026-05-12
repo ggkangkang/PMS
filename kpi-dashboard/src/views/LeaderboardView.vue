@@ -7,6 +7,7 @@ import {
 
 const selectedMonth = ref(availableMonths[0].value)
 const viewMode = ref('department') // 'department' | 'project'
+const rankBy = ref('total') // 'total' | 'commitments' | 'contributions' | 'behaviour'
 
 const departments = [
   { id: 'Project Site', label: 'Project Site', active: true },
@@ -16,25 +17,41 @@ const departments = [
 ]
 const selectedDept = ref('Project Site')
 
+const rankOptions = [
+  { id: 'total', label: 'Overall', max: 100 },
+  { id: 'commitments', label: 'Commitments (50%)', max: 50 },
+  { id: 'contributions', label: 'Contributions (30%)', max: 30 },
+  { id: 'behaviour', label: 'Character Pillar (20%)', max: 20 },
+]
+
+const activeRankOption = computed(() => rankOptions.find(r => r.id === rankBy.value))
+
+function getScoreVal(score) {
+  if (rankBy.value === 'commitments') return score.commitScore
+  if (rankBy.value === 'contributions') return score.contribScore
+  if (rankBy.value === 'behaviour') return score.behaviourScore
+  return score.total
+}
+
 const allStaff = computed(() => {
   return getDepartmentStaff().map(s => {
     const score = getFinalMonthlyScore(s.id, selectedMonth.value)
     const project = getProjectById(s.projectId)
-    return { ...s, score, project }
+    return { ...s, score, project, rankVal: getScoreVal(score) }
   })
 })
 
 const deptStaff = computed(() => allStaff.value.filter(s => s.department === selectedDept.value))
-const deptRanked = computed(() => [...deptStaff.value].sort((a, b) => b.score.total - a.score.total))
+const deptRanked = computed(() => [...deptStaff.value].sort((a, b) => b.rankVal - a.rankVal))
 const isDeptActive = computed(() => departments.find(d => d.id === selectedDept.value)?.active)
 
 const projectGroups = computed(() => {
   return projects.map(p => {
     const members = deptStaff.value
       .filter(s => s.projectId === p.id)
-      .sort((a, b) => b.score.total - a.score.total)
-    const avg = members.length ? Math.round(members.reduce((s, m) => s + m.score.total, 0) / members.length) : 0
-    const top = members[0]?.score.total || 0
+      .sort((a, b) => b.rankVal - a.rankVal)
+    const avg = members.length ? Math.round(members.reduce((s, m) => s + m.rankVal, 0) / members.length) : 0
+    const top = members[0]?.rankVal || 0
     return { ...p, members, avg, top }
   }).filter(g => g.members.length > 0)
 })
@@ -42,8 +59,8 @@ const projectGroups = computed(() => {
 const stats = computed(() => {
   const list = deptRanked.value
   const total = list.length
-  const avg = total ? Math.round(list.reduce((s, v) => s + v.score.total, 0) / total) : 0
-  const top = list[0]?.score.total || 0
+  const avg = total ? Math.round(list.reduce((s, v) => s + v.rankVal, 0) / total) : 0
+  const top = list[0]?.rankVal || 0
   const completed = list.filter(r => r.score.isComplete).length
   return { total, avg, top, completed }
 })
@@ -60,7 +77,16 @@ function gradeColor(g) {
 }
 
 function barWidth(score) {
-  return Math.round((score / 100) * 100) + '%'
+  return Math.round((score / (activeRankOption.value?.max || 100)) * 100) + '%'
+}
+
+function scoreColor(val) {
+  const max = activeRankOption.value?.max || 100
+  const pct = (val / max) * 100
+  if (pct >= 80) return '#008236'
+  if (pct >= 60) return '#2563eb'
+  if (pct >= 40) return '#ca3500'
+  return '#c10007'
 }
 </script>
 
@@ -104,12 +130,12 @@ function barWidth(score) {
           <p class="text-xl font-bold text-txt-heading">{{ stats.total }}</p>
         </div>
         <div class="card p-4">
-          <p class="text-xs text-txt-subtitle mb-1">Average Score</p>
-          <p class="text-xl font-bold text-brand-primary">{{ stats.avg }}<span class="text-sm text-txt-disabled font-normal">/100</span></p>
+          <p class="text-xs text-txt-subtitle mb-1">Average {{ activeRankOption.label.split('(')[0].trim() }}</p>
+          <p class="text-xl font-bold text-brand-primary">{{ stats.avg }}<span class="text-sm text-txt-disabled font-normal">/{{ activeRankOption.max }}</span></p>
         </div>
         <div class="card p-4">
-          <p class="text-xs text-txt-subtitle mb-1">Highest Score</p>
-          <p class="text-xl font-bold text-txt-success">{{ stats.top }}<span class="text-sm text-txt-disabled font-normal">/100</span></p>
+          <p class="text-xs text-txt-subtitle mb-1">Highest</p>
+          <p class="text-xl font-bold text-txt-success">{{ stats.top }}<span class="text-sm text-txt-disabled font-normal">/{{ activeRankOption.max }}</span></p>
         </div>
         <div class="card p-4">
           <p class="text-xs text-txt-subtitle mb-1">Fully Rated</p>
@@ -117,16 +143,27 @@ function barWidth(score) {
         </div>
       </div>
 
-      <!-- View Toggle -->
-      <div class="flex items-center gap-2 mb-5">
-        <button @click="viewMode = 'department'" :class="['filter-pill', { active: viewMode === 'department' }]">All Staff</button>
-        <button @click="viewMode = 'project'" :class="['filter-pill', { active: viewMode === 'project' }]">By Project</button>
+      <!-- Controls Row -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
+        <!-- View Toggle -->
+        <div class="flex items-center gap-2">
+          <button @click="viewMode = 'department'" :class="['filter-pill', { active: viewMode === 'department' }]">All Staff</button>
+          <button @click="viewMode = 'project'" :class="['filter-pill', { active: viewMode === 'project' }]">By Project</button>
+        </div>
+        <!-- Rank By -->
+        <div class="flex items-center gap-2 sm:ml-auto">
+          <span class="text-xs text-txt-muted font-medium">Rank by:</span>
+          <select v-model="rankBy" class="select-field text-sm py-1.5 w-48">
+            <option v-for="r in rankOptions" :key="r.id" :value="r.id">{{ r.label }}</option>
+          </select>
+        </div>
       </div>
 
       <!-- ═══ ALL STAFF VIEW ═══ -->
       <div v-if="viewMode === 'department'" class="card overflow-hidden">
-        <div class="px-5 pt-5 pb-3">
-          <h3 class="text-sm font-bold text-txt-heading">{{ selectedDept }} — Overall Ranking</h3>
+        <div class="px-5 pt-5 pb-3 flex items-center justify-between">
+          <h3 class="text-sm font-bold text-txt-heading">{{ selectedDept }} — Ranked by {{ activeRankOption.label }}</h3>
+          <span class="text-xs text-txt-muted">Max {{ activeRankOption.max }}</span>
         </div>
 
         <div v-for="(s, i) in deptRanked" :key="s.id"
@@ -147,19 +184,20 @@ function barWidth(score) {
             <div class="flex items-center gap-3 mt-2">
               <div class="flex-1 h-2 bg-surface-gray rounded-full overflow-hidden">
                 <div class="h-full rounded-full transition-all duration-700"
-                  :style="{ width: barWidth(s.score.total), backgroundColor: gradeColor(s.score.grade.color) }"
+                  :style="{ width: barWidth(s.rankVal), backgroundColor: scoreColor(s.rankVal) }"
                 ></div>
               </div>
-              <div class="flex items-center gap-1.5 shrink-0 text-xs text-txt-muted">
-                <span>{{ s.score.commitScore }}</span><span class="text-[8px] text-txt-disabled">+</span>
-                <span>{{ s.score.contribScore }}</span><span class="text-[8px] text-txt-disabled">+</span>
-                <span>{{ s.score.behaviourScore }}</span>
+              <!-- Breakdown chips -->
+              <div class="flex items-center gap-1.5 shrink-0">
+                <span class="text-[10px] px-1.5 py-0.5 rounded font-medium" :class="rankBy === 'commitments' ? 'bg-blue-100 text-blue-700' : 'text-txt-muted'"><span class="opacity-60">KPI</span> {{ s.score.commitScore }}<span class="opacity-50">/50</span></span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded font-medium" :class="rankBy === 'contributions' ? 'bg-yellow-100 text-yellow-700' : 'text-txt-muted'"><span class="opacity-60">Contrib</span> {{ s.score.contribScore }}<span class="opacity-50">/30</span></span>
+                <span class="text-[10px] px-1.5 py-0.5 rounded font-medium" :class="rankBy === 'behaviour' ? 'bg-green-100 text-green-700' : 'text-txt-muted'"><span class="opacity-60">Char</span> {{ s.score.behaviourScore }}<span class="opacity-50">/20</span></span>
               </div>
             </div>
           </div>
           <div class="text-right shrink-0 ml-2">
-            <p class="text-lg font-bold" :style="{ color: gradeColor(s.score.grade.color) }">{{ s.score.total }}</p>
-            <p class="text-[10px] font-semibold mt-0.5" :style="{ color: gradeColor(s.score.grade.color) }">{{ s.score.grade.grade }} · {{ s.score.grade.label }}</p>
+            <p class="text-lg font-bold" :style="{ color: scoreColor(s.rankVal) }">{{ s.rankVal }}</p>
+            <p class="text-[10px] text-txt-disabled">/{{ activeRankOption.max }}</p>
           </div>
         </div>
       </div>
@@ -178,7 +216,7 @@ function barWidth(score) {
             <div class="flex items-center gap-4">
               <div class="text-right">
                 <p class="text-xs text-txt-muted">Avg</p>
-                <p class="text-base font-bold text-brand-primary">{{ pg.avg }}</p>
+                <p class="text-base font-bold text-brand-primary">{{ pg.avg }}<span class="text-xs text-txt-disabled">/{{ activeRankOption.max }}</span></p>
               </div>
               <div class="text-right">
                 <p class="text-xs text-txt-muted">Top</p>
@@ -205,19 +243,19 @@ function barWidth(score) {
               <div class="flex items-center gap-3 mt-2">
                 <div class="flex-1 h-2 bg-surface-gray rounded-full overflow-hidden">
                   <div class="h-full rounded-full transition-all duration-700"
-                    :style="{ width: barWidth(s.score.total), backgroundColor: gradeColor(s.score.grade.color) }"
+                    :style="{ width: barWidth(s.rankVal), backgroundColor: scoreColor(s.rankVal) }"
                   ></div>
                 </div>
-                <div class="flex items-center gap-1.5 shrink-0 text-xs text-txt-muted">
-                  <span>{{ s.score.commitScore }}</span><span class="text-[8px] text-txt-disabled">+</span>
-                  <span>{{ s.score.contribScore }}</span><span class="text-[8px] text-txt-disabled">+</span>
-                  <span>{{ s.score.behaviourScore }}</span>
+                <div class="flex items-center gap-1.5 shrink-0">
+                  <span class="text-[10px] px-1.5 py-0.5 rounded font-medium" :class="rankBy === 'commitments' ? 'bg-blue-100 text-blue-700' : 'text-txt-muted'"><span class="opacity-60">KPI</span> {{ s.score.commitScore }}<span class="opacity-50">/50</span></span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded font-medium" :class="rankBy === 'contributions' ? 'bg-yellow-100 text-yellow-700' : 'text-txt-muted'"><span class="opacity-60">Contrib</span> {{ s.score.contribScore }}<span class="opacity-50">/30</span></span>
+                  <span class="text-[10px] px-1.5 py-0.5 rounded font-medium" :class="rankBy === 'behaviour' ? 'bg-green-100 text-green-700' : 'text-txt-muted'"><span class="opacity-60">Char</span> {{ s.score.behaviourScore }}<span class="opacity-50">/20</span></span>
                 </div>
               </div>
             </div>
             <div class="text-right shrink-0 ml-2">
-              <p class="text-lg font-bold" :style="{ color: gradeColor(s.score.grade.color) }">{{ s.score.total }}</p>
-              <p class="text-[10px] font-semibold mt-0.5" :style="{ color: gradeColor(s.score.grade.color) }">{{ s.score.grade.grade }}</p>
+              <p class="text-lg font-bold" :style="{ color: scoreColor(s.rankVal) }">{{ s.rankVal }}</p>
+              <p class="text-[10px] text-txt-disabled">/{{ activeRankOption.max }}</p>
             </div>
           </div>
         </div>

@@ -19,9 +19,7 @@ async function handleLogin() {
     localStorage.setItem('currentUser', JSON.stringify(user))
     const role = user.role
     if (role === 'admin') router.push('/admin')
-    else if (role === 'project-director') router.push('/hod-dashboard')
-    else if (role === 'project-manager') router.push('/dashboard')
-    else router.push('/dashboard')
+    else router.push('/my-dashboard')
   } else {
     error.value = 'Staff ID not found. Try PD001, PM001–PM002, or EMP001–EMP006'
   }

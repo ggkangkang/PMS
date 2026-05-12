@@ -5,7 +5,7 @@ import {
   contributionOptions, contributionBaseline, availableMonths, formatMonth,
   getMonthlyEval, getQuarterlyChar, getCurrentQuarter, isQuarterEndMonth,
   getCommitmentScore, getContributionScore, getCharacterScore, getContributionPoints, getScoreGrade,
-  getFinalMonthlyScore, getBehaviourScore, behaviourPillars,
+  getFinalMonthlyScore, getBehaviourScore, behaviourPillars, getCarryForwardPoints,
 } from '../data/dummyData'
 import ProgressRing from '../components/ProgressRing.vue'
 
@@ -51,8 +51,10 @@ watch([evalData, charData], () => {
 }, { immediate: true })
 
 const contribPts = computed(() => getContributionPoints(form.contributions))
+const carryPts = computed(() => getCarryForwardPoints(currentUser.value.id, selectedMonth.value))
+const effectiveContribPts = computed(() => contribPts.value + carryPts.value)
 const commitScore = computed(() => getCommitmentScore(form.commitmentRatings))
-const contribScore = computed(() => getContributionScore(contribPts.value))
+const contribScore = computed(() => getContributionScore(effectiveContribPts.value))
 const finalScore = computed(() => getFinalMonthlyScore(currentUser.value.id, selectedMonth.value))
 const behaviourScore = computed(() => getBehaviourScore(currentUser.value.id, selectedMonth.value))
 const charScore = computed(() => getCharacterScore(form.characterRatings))
@@ -60,7 +62,7 @@ const overallScore = computed(() => commitScore.value + contribScore.value + (is
 const maxScore = computed(() => isQuarterEnd.value ? 100 : 80)
 const overallPct = computed(() => Math.round((overallScore.value / maxScore.value) * 100))
 const grade = computed(() => getScoreGrade(overallPct.value))
-const contribTier = computed(() => contributionBaseline.tiers.find(t => contribPts.value >= t.min && contribPts.value <= t.max) || contributionBaseline.tiers[0])
+const contribTier = computed(() => contributionBaseline.tiers.find(t => effectiveContribPts.value >= t.min && effectiveContribPts.value <= t.max) || contributionBaseline.tiers[0])
 
 function setRating(type, id, value) {
   if (type === 'commitment') form.commitmentRatings[id] = value
@@ -178,7 +180,7 @@ const sections = computed(() => {
           <p class="text-sm text-txt-subtitle mt-1">Log extra initiatives for {{ formatMonth(selectedMonth) }}.</p>
         </div>
         <!-- Add -->
-        <div v-if="!isSubmitted" class="flex gap-2 mb-5">
+        <div class="flex gap-2 mb-5">
           <select v-model="selectedContrib" class="select-field flex-1">
             <option value="" disabled>Select a contribution…</option>
             <option v-for="o in contributionOptions" :key="o.label" :value="o.label">{{ o.label }} — {{ o.points }} pts</option>
@@ -190,7 +192,15 @@ const sections = computed(() => {
           <div class="flex items-center justify-center py-4">
             <div class="stat-block">
               <p class="stat-value text-brand-primary">{{ contribPts }}</p>
-              <p class="stat-label">Total Points</p>
+              <p class="stat-label">This Month</p>
+            </div>
+            <div v-if="carryPts > 0" class="stat-block">
+              <p class="stat-value text-indigo-600">+{{ carryPts }}</p>
+              <p class="stat-label">Carried Fwd</p>
+            </div>
+            <div class="stat-block">
+              <p class="stat-value" :class="carryPts > 0 ? 'text-brand-primary' : ''">{{ effectiveContribPts }}</p>
+              <p class="stat-label">Effective Total</p>
             </div>
             <div class="stat-block">
               <p class="stat-value">{{ contributionBaseline.minimumPoints }}</p>

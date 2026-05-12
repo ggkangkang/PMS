@@ -76,20 +76,60 @@ export const commitmentRatingScale = [
   { value: 5, label: 'Outstanding', description: 'Exceptional performance', color: 'emerge' },
 ]
 
-// ─── 4 Behaviour Pillars (20% — rated by supervisor) ─────────────────
+// ─── 4 Character Pillars (20% — 5% each, rated by supervisor) ────────
 export const behaviourPillars = [
-  { id: 'accountability', label: 'Accountability', subtitle: 'Responsible', description: 'Takes ownership of tasks, delivers on promises, accepts responsibility for outcomes and mistakes.' },
-  { id: 'sustainability', label: 'Sustainability', subtitle: 'Communication', description: 'Communicates clearly and consistently. Builds lasting professional relationships and maintains open dialogue.' },
-  { id: 'adaptability', label: 'Adaptability', subtitle: 'Teamwork', description: 'Works effectively with others, embraces change, and adjusts approach to meet evolving team and project needs.' },
-  { id: 'synergy', label: 'Synergy', subtitle: 'Problem-solving & Leadership', description: 'Drives collaborative problem-solving, demonstrates leadership qualities, and multiplies team effectiveness.' },
+  {
+    id: 'accountability', label: 'Accountability & Attendance', subtitle: '5%', weight: 5,
+    description: 'Punctuality, task ownership, deadline management, and proactive responsibility.',
+    rubric: {
+      1: 'Frequently late or absent; misses deadlines; shifts blame when mistakes happen; requires constant micromanagement.',
+      2: 'Occasionally late; completes most tasks but misses minor deadlines; takes ownership but needs help fixing mistakes; requires regular check-ins.',
+      3: 'Punctual and present; completes tasks reliably; takes ownership of mistakes and pivots to fix them quickly.',
+      4: 'Highly punctual; consistently beats deadlines; rarely needs supervision; proactively communicates potential delays before they happen.',
+      5: 'Flawless reliability; anticipates deadlines and needs before being asked; takes total ownership of outcomes, not just tasks.',
+    },
+  },
+  {
+    id: 'sustainability', label: 'Sustainability & Communication', subtitle: '5%', weight: 5,
+    description: 'Clear communication, resource mindfulness, and professional conduct.',
+    rubric: {
+      1: 'Communication is reactive or unclear; tone can be negative or unprofessional; careless with company resources.',
+      2: 'Communication is okay but sometimes lacks clarity or timeliness; trying to be mindful of resources but occasionally needs reminders.',
+      3: 'Communicates clearly and respectfully; updates the team appropriately; mindful of utility usage and office resources.',
+      4: 'Very articulate and prompt in communication; consistently professional; actively suggests minor ways to save resources or improve office sustainability.',
+      5: 'Highly proactive in updating stakeholders; actively drives resource-saving or sustainability initiatives; elevates the professionalism of the whole team.',
+    },
+  },
+  {
+    id: 'adaptability', label: 'Adaptability & Problem Solving', subtitle: '5%', weight: 5,
+    description: 'Handling change, stress management, and solution-oriented thinking.',
+    rubric: {
+      1: 'Resists new SOPs or changes; complains when faced with obstacles rather than finding solutions; freezes under pressure.',
+      2: 'Hesitant about change but complies; points out problems but struggles to find solutions without heavy guidance; gets visibly stressed but pushes through.',
+      3: 'Adapts well to changes; remains calm during stressful situations; brings at least one proposed solution when reporting a problem.',
+      4: 'Embraces change quickly; handles high-stress situations with visible composure; consistently brings multiple well-thought-out solutions to problems.',
+      5: 'Thrives in ambiguity; eagerly champions new tools (like this portal!); independently solves complex problems with high emotional intelligence.',
+    },
+  },
+  {
+    id: 'synergy', label: 'Synergy & Leadership', subtitle: '5%', weight: 5,
+    description: 'Team collaboration, peer support, knowledge sharing, and positive culture.',
+    rubric: {
+      1: 'Works in silos; reluctant to help peers; engages in negativity or creates friction within the department.',
+      2: 'Mostly keeps to themselves; will help if explicitly directed but rarely volunteers; maintains a neutral presence in the team culture.',
+      3: 'A solid team player; willing to help others when asked; shares knowledge; maintains a positive attitude.',
+      4: 'Frequently volunteers to assist overwhelmed peers; actively contributes to a positive environment; takes initiative in sharing new learnings.',
+      5: 'Actively mentors peers; voluntarily steps up for relief duties; champions a psychologically safe and uplifting company culture.',
+    },
+  },
 ]
 
 export const behaviourRatingScale = [
-  { value: 1, label: 'Unsatisfactory', color: 'danger' },
-  { value: 2, label: 'Needs Improvement', color: 'coral' },
+  { value: 1, label: 'Needs Improvement', color: 'danger' },
+  { value: 2, label: 'Developing', color: 'coral' },
   { value: 3, label: 'Meets Expectations', color: 'caution' },
   { value: 4, label: 'Exceeds Expectations', color: 'ocean' },
-  { value: 5, label: 'Outstanding', color: 'emerge' },
+  { value: 5, label: 'Role Model', color: 'emerge' },
 ]
 
 // Legacy — kept for backward compat with quarterly character view
@@ -365,6 +405,28 @@ export function getContributionPoints(contributions) {
   return contributions.reduce((s, c) => s + c.points, 0)
 }
 
+// Get previous month string (YYYY-MM)
+function getPrevMonth(month) {
+  const [y, m] = month.split('-').map(Number)
+  const d = new Date(y, m - 2, 1) // m-1 is current (0-indexed), m-2 is previous
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
+// Calculate carry-forward points from previous month
+// If points exceed the top-tier cap, the excess rolls into the next month
+export function getCarryForwardPoints(userId, month) {
+  const prevMonth = getPrevMonth(month)
+  const prevEv = getMonthlyEval(userId, prevMonth)
+  if (!prevEv) return 0
+  const prevPts = getContributionPoints(prevEv.self?.contributions || [])
+  // Also chain: get carry-forward into previous month
+  const prevCarry = getCarryForwardPoints(userId, prevMonth)
+  const prevTotal = prevPts + prevCarry
+  // Top tier cap (highest tier's min is the threshold — points above it carry forward)
+  const topTierMin = contributionBaseline.tiers[contributionBaseline.tiers.length - 1].min
+  return Math.max(0, prevTotal - topTierMin)
+}
+
 export function getOverallScore(commitmentRatings, contributions, characterRatings) {
   const contribPts = getContributionPoints(contributions)
   return getCommitmentScore(commitmentRatings) + getContributionScore(contribPts) + getCharacterScore(characterRatings)
@@ -373,20 +435,22 @@ export function getOverallScore(commitmentRatings, contributions, characterRatin
 // Final monthly score: 50% commitments + 30% contributions + 20% behaviour
 export function getFinalMonthlyScore(userId, month) {
   const ev = getMonthlyEval(userId, month)
-  if (!ev) return { commitScore: 0, contribScore: 0, behaviourScore: 0, total: 0, grade: getScoreGrade(0), isComplete: false }
+  if (!ev) return { commitScore: 0, contribScore: 0, behaviourScore: 0, total: 0, grade: getScoreGrade(0), isComplete: false, contribPts: 0, carryForwardPts: 0, effectiveContribPts: 0 }
   const commitScore = getCommitmentScore(ev.self?.commitmentRatings || {})
-  const contribPts = getContributionPoints(ev.self?.contributions || [])
-  const contribScore = getContributionScore(contribPts)
+  const rawContribPts = getContributionPoints(ev.self?.contributions || [])
+  const carryForwardPts = getCarryForwardPoints(userId, month)
+  const effectiveContribPts = rawContribPts + carryForwardPts
+  const contribScore = getContributionScore(effectiveContribPts)
   const behaviourScore = ev.supervisor?.behaviourRatings ? getBehaviourScore(ev.supervisor.behaviourRatings) : 0
   const isComplete = !!ev.supervisor?.behaviourRatings
   const total = commitScore + contribScore + behaviourScore
   const pct = Math.round((total / 100) * 100)
-  return { commitScore, contribScore, behaviourScore, contribPts, total, pct, grade: getScoreGrade(pct), isComplete }
+  return { commitScore, contribScore, behaviourScore, contribPts: rawContribPts, carryForwardPts, effectiveContribPts, total, pct, grade: getScoreGrade(pct), isComplete }
 }
 
 // Get all department staff (everyone except the HOD/PD)
 export function getDepartmentStaff() {
-  return users.filter(u => u.role !== 'project-director')
+  return users.filter(u => u.role !== 'project-director' && u.role !== 'admin')
 }
 
 export function getScoreGrade(score) {

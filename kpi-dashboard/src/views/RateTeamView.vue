@@ -3,8 +3,9 @@ import { ref, computed, reactive, watch } from 'vue'
 import {
   getSubordinates, getUserById, getMonthlyEval, getKPIsForRole,
   commitmentRatingScale, availableMonths, formatMonth, getProjectById,
-  getCommitmentScore, getContributionPoints, getEvalStatusInfo,
+  getCommitmentScore, getContributionPoints, getContributionScore, getEvalStatusInfo,
   behaviourPillars, behaviourRatingScale, getFinalMonthlyScore,
+  getCarryForwardPoints, contributionBaseline,
 } from '../data/dummyData'
 
 const currentUser = computed(() => { try { return JSON.parse(localStorage.getItem('currentUser') || '{}') } catch { return {} } })
@@ -234,23 +235,49 @@ function getEvalInfo(sub) {
                 <p class="text-sm text-txt-body">{{ getMonthlyEval(selectedEmployee.id, selectedMonth).self.notes }}</p>
               </div>
 
-              <!-- Behaviour 20% Rating (4 Pillars) -->
-              <h4 class="text-[11px] font-semibold text-brand-primary uppercase tracking-wider mt-5 mb-3">Behaviour Rating (20%) · 4 Pillars</h4>
+              <!-- Contributions (30%) — Read-only view of employee's logged contributions -->
+              <h4 class="text-[11px] font-semibold text-txt-muted uppercase tracking-wider mt-5 mb-3">Contributions (30%)</h4>
+              <div class="p-4 rounded-container border border-line">
+                <!-- Contribution list -->
+                <div v-if="getMonthlyEval(selectedEmployee.id, selectedMonth)?.self?.contributions?.length" class="space-y-1.5 mb-3">
+                  <div v-for="c in getMonthlyEval(selectedEmployee.id, selectedMonth).self.contributions" :key="c.id" class="flex items-center justify-between p-2 rounded bg-surface-gray/50 border border-line/30">
+                    <span class="text-sm text-txt-body">{{ c.type }}</span>
+                    <span class="tag tag-info text-[10px]">+{{ c.points }}</span>
+                  </div>
+                </div>
+                <p v-else class="text-sm text-txt-muted text-center py-3">No contributions logged</p>
+                <!-- Score summary -->
+                <div class="flex items-center justify-between pt-3 border-t border-line/50 text-xs">
+                  <div class="flex items-center gap-3">
+                    <span class="text-txt-body font-medium">This month: <strong>{{ getContributionPoints(getMonthlyEval(selectedEmployee.id, selectedMonth)?.self?.contributions || []) }}</strong> pts</span>
+                    <span v-if="getCarryForwardPoints(selectedEmployee.id, selectedMonth) > 0" class="text-indigo-600 font-medium">+ {{ getCarryForwardPoints(selectedEmployee.id, selectedMonth) }} carried fwd</span>
+                  </div>
+                  <span class="font-bold" :class="getFinalMonthlyScore(selectedEmployee.id, selectedMonth).contribScore >= 18 ? 'text-txt-success' : 'text-txt-warn'">{{ getFinalMonthlyScore(selectedEmployee.id, selectedMonth).contribScore }}/30</span>
+                </div>
+              </div>
+
+              <!-- Character Pillar 20% Rating (4 Pillars × 5% each) -->
+              <h4 class="text-[11px] font-semibold text-brand-primary uppercase tracking-wider mt-5 mb-3">Character Pillar (20%) · 4 Pillars × 5%</h4>
               <div class="space-y-3">
                 <div v-for="pillar in behaviourPillars" :key="pillar.id" class="p-4 rounded-container border border-line">
-                  <div class="flex items-start justify-between gap-3 mb-3">
+                  <div class="flex items-start justify-between gap-3 mb-2">
                     <div>
                       <p class="text-sm font-semibold text-txt-body">{{ pillar.label }}</p>
-                      <p class="text-[10px] text-txt-muted">{{ pillar.subtitle }}</p>
-                      <p class="text-xs text-txt-subtitle mt-1">{{ pillar.description }}</p>
+                      <p class="text-xs text-txt-subtitle mt-0.5">{{ pillar.description }}</p>
                     </div>
                     <span v-if="supervisorForm.behaviourRatings[pillar.id]" class="tag border text-[10px] shrink-0" :class="ratingBg(supervisorForm.behaviourRatings[pillar.id])">{{ supervisorForm.behaviourRatings[pillar.id] }}/5</span>
                   </div>
-                  <div class="flex gap-1.5">
+                  <div class="flex gap-1.5 mb-2">
                     <button v-for="r in behaviourRatingScale" :key="r.value" @click="supervisorForm.behaviourRatings[pillar.id] = r.value" :disabled="isSaved"
                       class="flex-1 py-2 px-1 rounded-btn text-[11px] font-medium border transition-all"
                       :class="supervisorForm.behaviourRatings[pillar.id] === r.value ? ratingBg(r.value) + ' ring-1 ring-offset-1 shadow-xs' : 'bg-white border-line text-txt-subtitle hover:bg-surface-gray'"
                     ><span class="block font-bold text-sm">{{ r.value }}</span><span class="hidden sm:block mt-0.5 leading-tight">{{ r.label }}</span></button>
+                  </div>
+                  <!-- Rubric description for selected level -->
+                  <div v-if="supervisorForm.behaviourRatings[pillar.id] && pillar.rubric" class="mt-2 p-2.5 rounded bg-surface-gray/60 border border-line/50">
+                    <p class="text-[11px] text-txt-subtitle leading-relaxed">
+                      <span class="font-semibold text-txt-body">Level {{ supervisorForm.behaviourRatings[pillar.id] }}:</span> {{ pillar.rubric[supervisorForm.behaviourRatings[pillar.id]] }}
+                    </p>
                   </div>
                 </div>
               </div>

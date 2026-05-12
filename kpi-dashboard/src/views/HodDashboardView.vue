@@ -4,6 +4,7 @@ import {
   getDepartmentStaff, getMonthlyEval, getFinalMonthlyScore, getProjectById,
   getEvalStatusInfo, availableMonths, formatMonth, behaviourPillars, behaviourRatingScale,
   getKPIsForRole, commitmentRatingScale, getCommitmentScore, getContributionPoints,
+  getCarryForwardPoints, getContributionScore, contributionBaseline,
 } from '../data/dummyData'
 
 const selectedMonth = ref(availableMonths[0].value)
@@ -18,10 +19,30 @@ const behaviourForm = ref({})
 const isSaved = ref(false)
 
 const staff = computed(() => getDepartmentStaff())
+const roleFilter = ref('all')
+
+const roleLabels = {
+  'project-manager': 'Project Manager',
+  'site-supervisor': 'Site Supervisor',
+  'site-engineer': 'Site Engineer',
+  'quantity-surveyor': 'Quantity Surveyor',
+  'site-admin': 'Site Admin',
+}
+
+const availableRoles = computed(() => {
+  const roles = [...new Set(staff.value.map(s => s.role))]
+  return [{ id: 'all', label: 'All Roles' }, ...roles.map(r => ({ id: r, label: roleLabels[r] || r }))]
+})
+
+const roleFilteredStaff = computed(() => {
+  if (roleFilter.value === 'all') return staff.value
+  return staff.value.filter(s => s.role === roleFilter.value)
+})
 
 const filters = computed(() => {
-  const all = staff.value.length
-  const completed = staff.value.filter(s => {
+  const base = roleFilteredStaff.value
+  const all = base.length
+  const completed = base.filter(s => {
     const ev = getMonthlyEval(s.id, selectedMonth.value)
     return ev?.supervisor?.behaviourRatings
   }).length
@@ -34,7 +55,7 @@ const filters = computed(() => {
 })
 
 const filteredStaff = computed(() => {
-  let list = staff.value
+  let list = roleFilteredStaff.value
   if (activeFilter.value === 'completed') {
     list = list.filter(s => {
       const ev = getMonthlyEval(s.id, selectedMonth.value)
@@ -67,16 +88,17 @@ const filteredStaff = computed(() => {
 })
 
 const stats = computed(() => {
-  const total = staff.value.length
-  const evaluated = staff.value.filter(s => {
+  const base = roleFilteredStaff.value
+  const total = base.length
+  const evaluated = base.filter(s => {
     const ev = getMonthlyEval(s.id, selectedMonth.value)
     return ev && ['submitted', 'reviewed'].includes(ev.status)
   }).length
-  const behaviourDone = staff.value.filter(s => {
+  const behaviourDone = base.filter(s => {
     const ev = getMonthlyEval(s.id, selectedMonth.value)
     return ev?.supervisor?.behaviourRatings
   }).length
-  const avgScore = staff.value.reduce((s, u) => s + getFinalMonthlyScore(u.id, selectedMonth.value).total, 0) / (total || 1)
+  const avgScore = base.reduce((s, u) => s + getFinalMonthlyScore(u.id, selectedMonth.value).total, 0) / (total || 1)
   return { total, evaluated, behaviourDone, avgScore: Math.round(avgScore) }
 })
 
@@ -160,13 +182,20 @@ function gradeColor(g) {
       </div>
     </div>
 
-    <!-- Filter pills -->
-    <div class="flex items-center gap-2 mb-5">
-      <button
-        v-for="f in filters" :key="f.id"
-        @click="activeFilter = f.id"
-        :class="['filter-pill', { active: activeFilter === f.id }]"
-      >{{ f.label }} <span class="font-bold ml-0.5">{{ f.count }}</span></button>
+    <!-- Filter Row -->
+    <div class="flex flex-col sm:flex-row sm:items-center gap-3 mb-5">
+      <div class="flex items-center gap-2">
+        <button
+          v-for="f in filters" :key="f.id"
+          @click="activeFilter = f.id"
+          :class="['filter-pill', { active: activeFilter === f.id }]"
+        >{{ f.label }} <span class="font-bold ml-0.5">{{ f.count }}</span></button>
+      </div>
+      <div class="sm:ml-auto">
+        <select v-model="roleFilter" class="select-field text-sm py-1.5 w-48">
+          <option v-for="r in availableRoles" :key="r.id" :value="r.id">{{ r.label }}</option>
+        </select>
+      </div>
     </div>
 
     <!-- Staff Table -->
@@ -291,25 +320,50 @@ function gradeColor(g) {
                 </div>
               </div>
             </div>
-
-            <!-- Behaviour 20% Rating (4 Pillars) -->
+            <!-- Contributions (30%) — Read-only view -->
             <div v-if="getMonthlyEval(selectedEmployee.id, selectedMonth)">
-              <h4 class="text-[11px] font-semibold text-brand-primary uppercase tracking-wider mb-3">Behaviour Rating (20%) · 4 Pillars</h4>
+              <h4 class="text-[11px] font-semibold text-txt-muted uppercase tracking-wider mb-3">Contributions (30%)</h4>
+              <div class="p-4 rounded-container border border-line">
+                <div v-if="getMonthlyEval(selectedEmployee.id, selectedMonth)?.self?.contributions?.length" class="space-y-1.5 mb-3">
+                  <div v-for="c in getMonthlyEval(selectedEmployee.id, selectedMonth).self.contributions" :key="c.id" class="flex items-center justify-between p-2 rounded bg-surface-gray/50 border border-line/30">
+                    <span class="text-sm text-txt-body">{{ c.type }}</span>
+                    <span class="tag tag-info text-[10px]">+{{ c.points }}</span>
+                  </div>
+                </div>
+                <p v-else class="text-sm text-txt-muted text-center py-3">No contributions logged</p>
+                <div class="flex items-center justify-between pt-3 border-t border-line/50 text-xs">
+                  <div class="flex items-center gap-3">
+                    <span class="text-txt-body font-medium">This month: <strong>{{ getContributionPoints(getMonthlyEval(selectedEmployee.id, selectedMonth)?.self?.contributions || []) }}</strong> pts</span>
+                    <span v-if="getCarryForwardPoints(selectedEmployee.id, selectedMonth) > 0" class="text-indigo-600 font-medium">+ {{ getCarryForwardPoints(selectedEmployee.id, selectedMonth) }} carried fwd</span>
+                  </div>
+                  <span class="font-bold" :class="getFinalMonthlyScore(selectedEmployee.id, selectedMonth).contribScore >= 18 ? 'text-txt-success' : 'text-txt-warn'">{{ getFinalMonthlyScore(selectedEmployee.id, selectedMonth).contribScore }}/30</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Character Pillar 20% Rating (4 Pillars × 5% each) -->
+            <div v-if="getMonthlyEval(selectedEmployee.id, selectedMonth)">
+              <h4 class="text-[11px] font-semibold text-brand-primary uppercase tracking-wider mb-3">Character Pillar (20%) · 4 Pillars × 5%</h4>
               <div class="space-y-3">
                 <div v-for="pillar in behaviourPillars" :key="pillar.id" class="p-4 rounded-container border border-line">
-                  <div class="flex items-start justify-between gap-3 mb-3">
+                  <div class="flex items-start justify-between gap-3 mb-2">
                     <div>
                       <p class="text-sm font-semibold text-txt-body">{{ pillar.label }}</p>
-                      <p class="text-[10px] text-txt-muted">{{ pillar.subtitle }}</p>
-                      <p class="text-xs text-txt-subtitle mt-1">{{ pillar.description }}</p>
+                      <p class="text-xs text-txt-subtitle mt-0.5">{{ pillar.description }}</p>
                     </div>
                     <span v-if="behaviourForm[pillar.id]" class="tag border text-[10px] shrink-0" :class="ratingBg(behaviourForm[pillar.id])">{{ behaviourForm[pillar.id] }}/5</span>
                   </div>
-                  <div class="flex gap-1.5">
+                  <div class="flex gap-1.5 mb-2">
                     <button v-for="r in behaviourRatingScale" :key="r.value" @click="behaviourForm[pillar.id] = r.value" :disabled="isSaved"
                       class="flex-1 py-2 px-1 rounded-btn text-[11px] font-medium border transition-all"
                       :class="behaviourForm[pillar.id] === r.value ? ratingBg(r.value) + ' ring-1 ring-offset-1 shadow-xs' : 'bg-white border-line text-txt-subtitle hover:bg-surface-gray'"
                     ><span class="block font-bold text-sm">{{ r.value }}</span><span class="hidden sm:block mt-0.5 leading-tight">{{ r.label }}</span></button>
+                  </div>
+                  <!-- Rubric description for selected level -->
+                  <div v-if="behaviourForm[pillar.id] && pillar.rubric" class="mt-2 p-2.5 rounded bg-surface-gray/60 border border-line/50">
+                    <p class="text-[11px] text-txt-subtitle leading-relaxed">
+                      <span class="font-semibold text-txt-body">Level {{ behaviourForm[pillar.id] }}:</span> {{ pillar.rubric[behaviourForm[pillar.id]] }}
+                    </p>
                   </div>
                 </div>
               </div>

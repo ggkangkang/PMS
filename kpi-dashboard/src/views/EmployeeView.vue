@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import {
   getUserById, getProjectById, getSubordinates, getMonthlyEval, getKPIsForRole,
   getCommitmentScore, getContributionPoints, getContributionScore, getEvalStatusInfo,
-  availableMonths, formatMonth,
+  availableMonths, formatMonth, getCarryForwardPoints, contributionBaseline,
 } from '../data/dummyData'
 
 const currentUser = computed(() => { try { return JSON.parse(localStorage.getItem('currentUser') || '{}') } catch { return {} } })
@@ -50,7 +50,12 @@ function getEvalSummary(userId) {
 const myEval = computed(() => getMonthlyEval(currentUser.value.id, selectedMonth.value))
 const myCommitScore = computed(() => myEval.value ? getCommitmentScore(myEval.value.self?.commitmentRatings || {}) : 0)
 const myContribPts = computed(() => myEval.value ? getContributionPoints(myEval.value.self?.contributions || []) : 0)
-const myContribScore = computed(() => getContributionScore(myContribPts.value))
+const myCarryIn = computed(() => getCarryForwardPoints(currentUser.value.id, selectedMonth.value))
+const myEffectivePts = computed(() => myContribPts.value + myCarryIn.value)
+const myContribScore = computed(() => getContributionScore(myEffectivePts.value))
+// Points that will carry forward to next month
+const topTierMin = contributionBaseline.tiers[contributionBaseline.tiers.length - 1].min
+const myCarryOut = computed(() => Math.max(0, myEffectivePts.value - topTierMin))
 </script>
 
 <template>
@@ -81,18 +86,34 @@ const myContribScore = computed(() => getContributionScore(myContribPts.value))
 
       <!-- Staff: stats -->
       <div v-if="!isPM" class="card mb-6">
-        <div class="flex items-center justify-center py-5">
+        <div class="flex items-center justify-center py-5 flex-wrap gap-y-3">
           <div class="stat-block">
             <p class="stat-value text-brand-primary">{{ myCommitScore }}<span class="text-sm text-txt-muted font-normal">/50</span></p>
             <p class="stat-label">Commitments</p>
           </div>
           <div class="stat-block">
             <p class="stat-value">{{ myContribPts }} <span class="text-sm text-txt-muted font-normal">pts</span></p>
-            <p class="stat-label">Contributions</p>
+            <p class="stat-label">This Month</p>
+          </div>
+          <div v-if="myCarryIn > 0" class="stat-block">
+            <p class="stat-value text-indigo-600">+{{ myCarryIn }}</p>
+            <p class="stat-label">Carried In</p>
           </div>
           <div class="stat-block">
             <p class="stat-value">{{ myContribScore }}<span class="text-sm text-txt-muted font-normal">/30</span></p>
-            <p class="stat-label">Contribution Score</p>
+            <p class="stat-label">Contrib Score</p>
+          </div>
+          <div v-if="myCarryOut > 0" class="stat-block">
+            <p class="stat-value text-emerald-600">{{ myCarryOut }}</p>
+            <p class="stat-label">→ Next Month</p>
+          </div>
+        </div>
+        <!-- Carry-forward info bar -->
+        <div v-if="myCarryIn > 0 || myCarryOut > 0" class="px-5 pb-4">
+          <div class="p-3 rounded bg-indigo-50 border border-indigo-100 text-xs text-indigo-700">
+            <span class="font-semibold">Carry-Forward:</span>
+            <span v-if="myCarryIn > 0"> You received <strong>{{ myCarryIn }} pts</strong> from last month.</span>
+            <span v-if="myCarryOut > 0"> <strong>{{ myCarryOut }} pts</strong> excess will carry to next month (above {{ topTierMin }} threshold).</span>
           </div>
         </div>
       </div>
