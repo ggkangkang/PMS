@@ -9,6 +9,8 @@ import HodDashboardView from '../views/HodDashboardView.vue'
 import AdminView from '../views/AdminView.vue'
 import LeaderboardView from '../views/LeaderboardView.vue'
 import MyDashboardView from '../views/MyDashboardView.vue'
+import PMTeamView from '../views/PMTeamView.vue'
+import TeamProjectsView from '../views/TeamProjectsView.vue'
 
 const routes = [
   { path: '/', redirect: '/login' },
@@ -19,6 +21,8 @@ const routes = [
   { path: '/rate-team', name: 'RateTeam', component: RateTeamView, meta: { layout: 'app' } },
   { path: '/projects', name: 'Projects', component: ProjectsView, meta: { layout: 'app' } },
   { path: '/hod-dashboard', name: 'HodDashboard', component: HodDashboardView, meta: { layout: 'app' } },
+  { path: '/team', name: 'TeamProjects', component: TeamProjectsView, meta: { layout: 'app' } },
+  { path: '/pm-team', name: 'PMTeam', component: PMTeamView, meta: { layout: 'app' } },
   { path: '/leaderboard', name: 'Leaderboard', component: LeaderboardView, meta: { layout: 'app' } },
   { path: '/admin', name: 'Admin', component: AdminView, meta: { layout: 'app' } },
   { path: '/changelog', name: 'Changelog', component: ChangelogView, meta: { layout: 'app' } },

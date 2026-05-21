@@ -96,7 +96,6 @@ const sections = computed(() => {
     { id: 'contributions', label: 'Contributions', weight: '30%' },
   ]
   if (isQuarterEnd.value) s.push({ id: 'character', label: 'Character', weight: '20%' })
-  s.push({ id: 'summary', label: 'Summary', weight: '' })
   return s
 })
 </script>

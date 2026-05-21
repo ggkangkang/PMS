@@ -280,6 +280,251 @@ export const monthlyEvaluations = {
     },
     lockedAt: '2026-05-04',
   },
+
+  // ─── Historical data (Nov 2025 – Mar 2026) for trend chart ─────────
+  // March 2026
+  'EMP002-2026-03': {
+    employeeId: 'EMP002', month: '2026-03', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 3, kpi4: 3, kpi5: 4 }, contributions: [{ id: 1, type: 'ISO Coordination', points: 10, date: '2026-03-10' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 3, kpi4: 3, kpi5: 4 }, behaviourRatings: { accountability: 4, sustainability: 3, adaptability: 4, synergy: 3 }, notes: 'Good work on drawings.', ratedBy: 'PM001', ratedAt: '2026-04-03' },
+    lockedAt: '2026-04-03',
+  },
+  'EMP003-2026-03': {
+    employeeId: 'EMP003', month: '2026-03', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2026-03-15' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: 'Consistent.', ratedBy: 'PM001', ratedAt: '2026-04-03' },
+    lockedAt: '2026-04-03',
+  },
+  'EMP004-2026-03': {
+    employeeId: 'EMP004', month: '2026-03', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 4, kpi4: 4, kpi5: 3 }, contributions: [{ id: 1, type: 'ISO Coordination', points: 10, date: '2026-03-08' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 4, kpi4: 4, kpi5: 3 }, behaviourRatings: { accountability: 4, sustainability: 4, adaptability: 3, synergy: 4 }, notes: 'Strong QS work.', ratedBy: 'PM002', ratedAt: '2026-04-02' },
+    lockedAt: '2026-04-02',
+  },
+  'EMP005-2026-03': {
+    employeeId: 'EMP005', month: '2026-03', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 2 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 2 }, behaviourRatings: { accountability: 3, sustainability: 2, adaptability: 3, synergy: 3 }, notes: 'Needs to be more proactive.', ratedBy: 'PM002', ratedAt: '2026-04-02' },
+    lockedAt: '2026-04-02',
+  },
+  'EMP006-2026-03': {
+    employeeId: 'EMP006', month: '2026-03', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 3, kpi4: 4, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2026-03-20' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 3, kpi4: 4, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 4, synergy: 3 }, notes: 'Good technical skill.', ratedBy: 'PM002', ratedAt: '2026-04-02' },
+    lockedAt: '2026-04-02',
+  },
+  'PM001-2026-03': {
+    employeeId: 'PM001', month: '2026-03', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 4, kpi4: 4, kpi5: 3 }, contributions: [{ id: 1, type: 'ISO Coordination', points: 10, date: '2026-03-15' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 4, kpi4: 4, kpi5: 3 }, behaviourRatings: { accountability: 4, sustainability: 4, adaptability: 4, synergy: 4 }, notes: 'Good leadership.', ratedBy: 'PD001', ratedAt: '2026-04-05' },
+    lockedAt: '2026-04-05',
+  },
+  'PM002-2026-03': {
+    employeeId: 'PM002', month: '2026-03', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 4, kpi4: 4, kpi5: 3 }, contributions: [{ id: 1, type: 'Support Property Sales', points: 60, date: '2026-03-10' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 4, kpi4: 4, kpi5: 3 }, behaviourRatings: { accountability: 4, sustainability: 4, adaptability: 3, synergy: 4 }, notes: 'Managed well.', ratedBy: 'PD001', ratedAt: '2026-04-05' },
+    lockedAt: '2026-04-05',
+  },
+
+  // February 2026
+  'EMP001-2026-02': {
+    employeeId: 'EMP001', month: '2026-02', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 4, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2026-02-20' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 4, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM001', ratedAt: '2026-03-05' },
+    lockedAt: '2026-03-05',
+  },
+  'EMP002-2026-02': {
+    employeeId: 'EMP002', month: '2026-02', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 3, kpi4: 4, kpi5: 3 }, contributions: [{ id: 1, type: 'ISO Coordination', points: 10, date: '2026-02-15' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 3, kpi4: 4, kpi5: 3 }, behaviourRatings: { accountability: 4, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM001', ratedAt: '2026-03-05' },
+    lockedAt: '2026-03-05',
+  },
+  'EMP003-2026-02': {
+    employeeId: 'EMP003', month: '2026-02', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 2, kpi2: 3, kpi3: 3, kpi4: 2, kpi5: 3 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 2, kpi2: 3, kpi3: 3, kpi4: 2, kpi5: 3 }, behaviourRatings: { accountability: 2, sustainability: 3, adaptability: 2, synergy: 3 }, notes: '', ratedBy: 'PM001', ratedAt: '2026-03-05' },
+    lockedAt: '2026-03-05',
+  },
+  'EMP004-2026-02': {
+    employeeId: 'EMP004', month: '2026-02', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 4, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2026-02-12' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 4, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 4 }, notes: '', ratedBy: 'PM002', ratedAt: '2026-03-04' },
+    lockedAt: '2026-03-04',
+  },
+  'EMP005-2026-02': {
+    employeeId: 'EMP005', month: '2026-02', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 2, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 2, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 2, synergy: 3 }, notes: '', ratedBy: 'PM002', ratedAt: '2026-03-04' },
+    lockedAt: '2026-03-04',
+  },
+  'EMP006-2026-02': {
+    employeeId: 'EMP006', month: '2026-02', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2026-02-18' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM002', ratedAt: '2026-03-04' },
+    lockedAt: '2026-03-04',
+  },
+  'PM001-2026-02': {
+    employeeId: 'PM001', month: '2026-02', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 4, kpi3: 4, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'ISO Coordination', points: 10, date: '2026-02-10' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 4, kpi3: 4, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 4, adaptability: 3, synergy: 4 }, notes: '', ratedBy: 'PD001', ratedAt: '2026-03-06' },
+    lockedAt: '2026-03-06',
+  },
+  'PM002-2026-02': {
+    employeeId: 'PM002', month: '2026-02', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 4, kpi5: 3 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 4, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PD001', ratedAt: '2026-03-06' },
+    lockedAt: '2026-03-06',
+  },
+
+  // January 2026
+  'EMP001-2026-01': {
+    employeeId: 'EMP001', month: '2026-01', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 2 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 2 }, behaviourRatings: { accountability: 3, sustainability: 2, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM001', ratedAt: '2026-02-05' },
+    lockedAt: '2026-02-05',
+  },
+  'EMP002-2026-01': {
+    employeeId: 'EMP002', month: '2026-01', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2026-01-22' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM001', ratedAt: '2026-02-05' },
+    lockedAt: '2026-02-05',
+  },
+  'EMP003-2026-01': {
+    employeeId: 'EMP003', month: '2026-01', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 2, kpi2: 2, kpi3: 3, kpi4: 2, kpi5: 2 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 2, kpi2: 2, kpi3: 3, kpi4: 2, kpi5: 2 }, behaviourRatings: { accountability: 2, sustainability: 2, adaptability: 2, synergy: 2 }, notes: '', ratedBy: 'PM001', ratedAt: '2026-02-05' },
+    lockedAt: '2026-02-05',
+  },
+  'EMP004-2026-01': {
+    employeeId: 'EMP004', month: '2026-01', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 4, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'ISO Coordination', points: 10, date: '2026-01-14' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 4, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 4, synergy: 3 }, notes: '', ratedBy: 'PM002', ratedAt: '2026-02-04' },
+    lockedAt: '2026-02-04',
+  },
+  'EMP005-2026-01': {
+    employeeId: 'EMP005', month: '2026-01', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 2, kpi2: 3, kpi3: 2, kpi4: 3, kpi5: 2 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 2, kpi2: 3, kpi3: 2, kpi4: 3, kpi5: 2 }, behaviourRatings: { accountability: 2, sustainability: 2, adaptability: 2, synergy: 3 }, notes: '', ratedBy: 'PM002', ratedAt: '2026-02-04' },
+    lockedAt: '2026-02-04',
+  },
+  'EMP006-2026-01': {
+    employeeId: 'EMP006', month: '2026-01', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 2 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 2 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 2 }, notes: '', ratedBy: 'PM002', ratedAt: '2026-02-04' },
+    lockedAt: '2026-02-04',
+  },
+  'PM001-2026-01': {
+    employeeId: 'PM001', month: '2026-01', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PD001', ratedAt: '2026-02-06' },
+    lockedAt: '2026-02-06',
+  },
+  'PM002-2026-01': {
+    employeeId: 'PM002', month: '2026-01', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2026-01-20' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PD001', ratedAt: '2026-02-06' },
+    lockedAt: '2026-02-06',
+  },
+
+  // December 2025
+  'EMP001-2025-12': {
+    employeeId: 'EMP001', month: '2025-12', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 3, kpi4: 4, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2025-12-10' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 3, kpi4: 4, kpi5: 3 }, behaviourRatings: { accountability: 4, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM001', ratedAt: '2026-01-05' },
+    lockedAt: '2026-01-05',
+  },
+  'EMP002-2025-12': {
+    employeeId: 'EMP002', month: '2025-12', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 4, kpi4: 3, kpi5: 4 }, contributions: [{ id: 1, type: 'ISO Coordination', points: 10, date: '2025-12-15' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 4, kpi4: 3, kpi5: 4 }, behaviourRatings: { accountability: 4, sustainability: 4, adaptability: 4, synergy: 3 }, notes: '', ratedBy: 'PM001', ratedAt: '2026-01-05' },
+    lockedAt: '2026-01-05',
+  },
+  'EMP003-2025-12': {
+    employeeId: 'EMP003', month: '2025-12', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 2, kpi4: 3, kpi5: 3 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 2, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 2, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM001', ratedAt: '2026-01-05' },
+    lockedAt: '2026-01-05',
+  },
+  'EMP004-2025-12': {
+    employeeId: 'EMP004', month: '2025-12', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 4, kpi4: 4, kpi5: 3 }, contributions: [{ id: 1, type: 'Support Property Sales', points: 60, date: '2025-12-08' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 4, kpi4: 4, kpi5: 3 }, behaviourRatings: { accountability: 4, sustainability: 4, adaptability: 4, synergy: 4 }, notes: '', ratedBy: 'PM002', ratedAt: '2026-01-04' },
+    lockedAt: '2026-01-04',
+  },
+  'EMP005-2025-12': {
+    employeeId: 'EMP005', month: '2025-12', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2025-12-18' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM002', ratedAt: '2026-01-04' },
+    lockedAt: '2026-01-04',
+  },
+  'EMP006-2025-12': {
+    employeeId: 'EMP006', month: '2025-12', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 4, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2025-12-20' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 4, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM002', ratedAt: '2026-01-04' },
+    lockedAt: '2026-01-04',
+  },
+  'PM001-2025-12': {
+    employeeId: 'PM001', month: '2025-12', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 4, kpi4: 4, kpi5: 4 }, contributions: [{ id: 1, type: 'ISO Coordination', points: 10, date: '2025-12-10' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 4, kpi2: 4, kpi3: 4, kpi4: 4, kpi5: 4 }, behaviourRatings: { accountability: 4, sustainability: 4, adaptability: 4, synergy: 4 }, notes: '', ratedBy: 'PD001', ratedAt: '2026-01-06' },
+    lockedAt: '2026-01-06',
+  },
+  'PM002-2025-12': {
+    employeeId: 'PM002', month: '2025-12', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 4, kpi4: 4, kpi5: 3 }, contributions: [{ id: 1, type: 'Support Property Sales', points: 60, date: '2025-12-15' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 4, kpi2: 3, kpi3: 4, kpi4: 4, kpi5: 3 }, behaviourRatings: { accountability: 4, sustainability: 3, adaptability: 4, synergy: 4 }, notes: '', ratedBy: 'PD001', ratedAt: '2026-01-06' },
+    lockedAt: '2026-01-06',
+  },
+
+  // November 2025
+  'EMP001-2025-11': {
+    employeeId: 'EMP001', month: '2025-11', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2025-11-12' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM001', ratedAt: '2025-12-05' },
+    lockedAt: '2025-12-05',
+  },
+  'EMP002-2025-11': {
+    employeeId: 'EMP002', month: '2025-11', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM001', ratedAt: '2025-12-05' },
+    lockedAt: '2025-12-05',
+  },
+  'EMP003-2025-11': {
+    employeeId: 'EMP003', month: '2025-11', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 2, kpi2: 2, kpi3: 2, kpi4: 2, kpi5: 2 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 2, kpi2: 2, kpi3: 2, kpi4: 2, kpi5: 2 }, behaviourRatings: { accountability: 2, sustainability: 2, adaptability: 2, synergy: 2 }, notes: '', ratedBy: 'PM001', ratedAt: '2025-12-05' },
+    lockedAt: '2025-12-05',
+  },
+  'EMP004-2025-11': {
+    employeeId: 'EMP004', month: '2025-11', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2025-11-20' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM002', ratedAt: '2025-12-04' },
+    lockedAt: '2025-12-04',
+  },
+  'EMP005-2025-11': {
+    employeeId: 'EMP005', month: '2025-11', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 2, kpi3: 3, kpi4: 2, kpi5: 2 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 2, kpi3: 3, kpi4: 2, kpi5: 2 }, behaviourRatings: { accountability: 2, sustainability: 2, adaptability: 2, synergy: 2 }, notes: '', ratedBy: 'PM002', ratedAt: '2025-12-04' },
+    lockedAt: '2025-12-04',
+  },
+  'EMP006-2025-11': {
+    employeeId: 'EMP006', month: '2025-11', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 2, kpi5: 3 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 2, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 2, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PM002', ratedAt: '2025-12-04' },
+    lockedAt: '2025-12-04',
+  },
+  'PM001-2025-11': {
+    employeeId: 'PM001', month: '2025-11', projectId: 'PRJ001', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 4, kpi4: 3, kpi5: 3 }, contributions: [{ id: 1, type: 'Host Trainings', points: 5, date: '2025-11-15' }], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 4, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PD001', ratedAt: '2025-12-06' },
+    lockedAt: '2025-12-06',
+  },
+  'PM002-2025-11': {
+    employeeId: 'PM002', month: '2025-11', projectId: 'PRJ002', status: 'reviewed',
+    self: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, contributions: [], notes: '' },
+    supervisor: { commitmentRatings: { kpi1: 3, kpi2: 3, kpi3: 3, kpi4: 3, kpi5: 3 }, behaviourRatings: { accountability: 3, sustainability: 3, adaptability: 3, synergy: 3 }, notes: '', ratedBy: 'PD001', ratedAt: '2025-12-06' },
+    lockedAt: '2025-12-06',
+  },
 }
 
 // ─── Quarterly Character Evaluations ─────────────────────────────────
@@ -307,12 +552,13 @@ export const quarterlyCharacter = {
   },
 }
 
-// ─── Available months for evaluation ─────────────────────────────────
 export const availableMonths = [
   { value: '2026-04', label: 'April 2026' },
   { value: '2026-03', label: 'March 2026' },
   { value: '2026-02', label: 'February 2026' },
   { value: '2026-01', label: 'January 2026' },
+  { value: '2025-12', label: 'December 2025' },
+  { value: '2025-11', label: 'November 2025' },
 ]
 
 // ─── Helper Functions ────────────────────────────────────────────────
@@ -468,4 +714,23 @@ export function getEvalStatusInfo(status) {
     case 'draft': return { label: 'Draft', cls: 'tag-caution' }
     default: return { label: 'Not Started', cls: 'bg-surface-gray text-txt-disabled' }
   }
+}
+
+// Get project average score for a given month
+export function getProjectAvgScore(projectId, month) {
+  const staff = users.filter(u => u.projectId === projectId && u.role !== 'project-director' && u.role !== 'admin')
+  if (staff.length === 0) return 0
+  const scores = staff.map(s => getFinalMonthlyScore(s.id, month))
+  const completedScores = scores.filter(s => s.total > 0)
+  if (completedScores.length === 0) return 0
+  return Math.round(completedScores.reduce((sum, s) => sum + s.total, 0) / completedScores.length)
+}
+
+// Get all staff under a project director (all PMs + all staff)
+export function getDirectorSubordinates(directorId) {
+  const director = getUserById(directorId)
+  if (!director || !director.projects) return []
+  const pms = users.filter(u => u.reportsTo === directorId)
+  const staff = users.filter(u => pms.some(pm => pm.id === u.reportsTo))
+  return [...pms, ...staff]
 }

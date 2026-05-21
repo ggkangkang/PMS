@@ -1,10 +1,30 @@
 <script setup>
 const versions = [
   {
-    version: '2.1.0',
-    date: '11 May 2026',
+    version: '2.2.0',
+    date: '21 May 2026',
     tag: 'Latest',
     tagCls: 'tag-success',
+    changes: [
+      { type: 'feature', text: 'Project Director monitoring dashboard — no personal scoring, focused on team oversight and project health' },
+      { type: 'feature', text: 'Pending Your Rating panel — shows PMs who submitted evaluations awaiting PD review' },
+      { type: 'feature', text: 'Incomplete Evaluations panel — highlights staff with Draft or Not Started status for the month' },
+      { type: 'feature', text: '6-month Project Performance Trend — interactive line chart (Chart.js) comparing average scores across all projects' },
+      { type: 'feature', text: 'PM Team Leaderboard — Project Managers now see rankings of their own team members only' },
+      { type: 'feature', text: 'Quick Actions on dashboard — fast access to Evaluation, Leaderboard, and Team views' },
+      { type: 'feature', text: 'Changelog moved to profile menu — opens as a popup dialog instead of a separate page' },
+      { type: 'improvement', text: 'Expanded color palette supporting 10+ projects in trend chart' },
+      { type: 'improvement', text: 'Summary stats row for PD — Total Staff, Eval Completed, Pending Rating, Incomplete counts at a glance' },
+      { type: 'improvement', text: 'PM navigation simplified — Team Overview & Rate Team merged into "My Team" tab' },
+      { type: 'improvement', text: 'Removed Changelog tab from all role navigations — accessible via avatar menu' },
+      { type: 'improvement', text: 'Removed My Evaluation tab for Project Director — monitoring-only role' },
+    ],
+  },
+  {
+    version: '2.1.0',
+    date: '11 May 2026',
+    tag: '',
+    tagCls: '',
     changes: [
       { type: 'feature', text: 'My Dashboard — unified personal dashboard for all roles with score breakdown, grade, and department rank' },
       { type: 'feature', text: 'Top 5 Leaderboard widget on My Dashboard with your position highlighted' },
